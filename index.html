@@ -78,7 +78,6 @@
 
         .altar-item:active {
             cursor: grabbing;
-            transform: scale(1.05);
             z-index: 50 !important;
         }
 
@@ -229,7 +228,7 @@
             </div>
 
             <!-- 배치 가능한 도구 목록 Grid -->
-            <div class="grid grid-cols-4 md:grid-cols-2 gap-2">
+            <div class="grid grid-cols-3 md:grid-cols-2 gap-2">
                 <button onclick="addAltarItem('candle')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-white/5 hover:bg-purple-500/10 border border-white/5 hover:border-purple-500/30 text-xs text-slate-300 transition group">
                     <i data-lucide="flame" class="w-5 h-5 mb-1 text-amber-400 group-hover:scale-110 transition"></i>
                     <span>양초</span>
@@ -258,6 +257,12 @@
                 <button onclick="addAltarItem('wand')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-white/5 hover:bg-purple-500/10 border border-white/5 hover:border-purple-500/30 text-xs text-slate-300 transition group">
                     <i data-lucide="wand-2" class="w-5 h-5 mb-1 text-emerald-400 group-hover:scale-110 transition"></i>
                     <span>마법 지팡이</span>
+                </button>
+
+                <!-- 신규: 단검(Athame) -->
+                <button onclick="addAltarItem('athame')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-white/5 hover:bg-purple-500/10 border border-white/5 hover:border-purple-500/30 text-xs text-slate-300 transition group">
+                    <i data-lucide="sword" class="w-5 h-5 mb-1 text-slate-200 group-hover:scale-110 transition"></i>
+                    <span>단검 (Athame)</span>
                 </button>
 
                 <button onclick="addAltarItem('bell')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-white/5 hover:bg-purple-500/10 border border-white/5 hover:border-purple-500/30 text-xs text-slate-300 transition group">
@@ -295,10 +300,23 @@
             <div id="altar-canvas" class="w-full h-full relative"></div>
 
             <!-- 선택된 아이템 전용 커스텀 설정 패널 -->
-            <div id="item-inspector" class="absolute bottom-4 left-1/2 -translate-x-1/2 glass-panel rounded-2xl px-4 py-2.5 hidden flex-wrap items-center gap-3 z-30 shadow-2xl border border-purple-500/30">
+            <div id="item-inspector" class="absolute bottom-4 left-1/2 -translate-x-1/2 glass-panel rounded-2xl px-4 py-2.5 hidden flex-wrap items-center gap-3 z-30 shadow-2xl border border-purple-500/30 max-w-[95%] sm:max-w-none">
                 <span id="inspector-title" class="text-xs font-semibold text-purple-200 flex items-center gap-1.5">
                     <i data-lucide="sliders" class="w-3.5 h-3.5"></i> 아이템 설정
                 </span>
+
+                <!-- 회전 제어 슬라이더 & 버튼 (모든 도구 공통) -->
+                <div class="flex items-center gap-2 bg-white/5 px-2.5 py-1 rounded-xl border border-white/10">
+                    <label class="text-[11px] text-slate-300 flex items-center gap-1">
+                        <i data-lucide="rotate-cw" class="w-3 h-3 text-purple-300"></i>
+                        <span>회전:</span>
+                    </label>
+                    <input type="range" id="rotation-slider" min="0" max="360" value="0" class="w-20 sm:w-24 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-purple-400">
+                    <span id="rotation-value" class="text-[10px] text-purple-200 w-7 text-right">0°</span>
+                    <button id="rotate-45-btn" title="45도 회전" class="p-1 rounded bg-white/10 hover:bg-white/20 text-[10px] text-slate-200">
+                        +45°
+                    </button>
+                </div>
 
                 <!-- 양초 색상 선택 도구 -->
                 <div id="candle-color-picker-wrap" class="flex items-center gap-2 hidden">
@@ -571,6 +589,7 @@
                 type,
                 x: defaultX,
                 y: defaultY,
+                rotation: config.rotation || 0, // 회전 각도 (도 단위)
                 active: config.active !== undefined ? config.active : true,
                 color: config.color || '#f59e06',
                 crystalType: config.crystalType || 'amethyst',
@@ -579,7 +598,6 @@
                 crystalAura: config.crystalAura || 'rgba(192, 132, 252, 0.7)'
             };
 
-            // 중복 방지 체크 후 배열에 푸시
             if (!state.items.some(i => i.id === item.id)) {
                 state.items.push(item);
             }
@@ -601,6 +619,7 @@
             el.className = 'altar-item flex flex-col items-center justify-center p-2';
             el.style.left = `${item.x}px`;
             el.style.top = `${item.y}px`;
+            el.style.transform = `rotate(${item.rotation || 0}deg)`;
 
             el.innerHTML = getItemHTML(item);
 
@@ -679,9 +698,32 @@
                     `;
                 case 'wand':
                     return `
-                        <div class="flex flex-col items-center rotate-45">
-                            <div class="w-2 h-20 bg-gradient-to-t from-amber-900 via-amber-700 to-emerald-400 rounded-full shadow-md"></div>
-                            <span class="text-[10px] text-slate-400 mt-1 -rotate-45">지팡이</span>
+                        <div class="flex flex-col items-center">
+                            <div class="w-2.5 h-24 bg-gradient-to-t from-amber-950 via-amber-800 to-emerald-400 rounded-full shadow-lg border border-amber-900/40 relative">
+                                <div class="w-2.5 h-2.5 bg-emerald-300 rounded-full blur-[2px] absolute top-0 left-0"></div>
+                            </div>
+                            <span class="text-[10px] text-slate-400 mt-1">지팡이</span>
+                        </div>
+                    `;
+                case 'athame':
+                    return `
+                        <div class="flex flex-col items-center">
+                            <div class="relative flex flex-col items-center filter drop-shadow-md">
+                                <!-- 날 (Blade) -->
+                                <div class="w-3 h-16 bg-gradient-to-t from-slate-400 via-slate-200 to-slate-100 rounded-t-full border border-slate-300 relative overflow-hidden">
+                                    <div class="w-0.5 h-full bg-white/70 absolute left-1/2 -translate-x-1/2"></div>
+                                </div>
+                                <!-- 가드 (Guard) -->
+                                <div class="w-8 h-1.5 bg-amber-600 rounded-full shadow-sm border border-amber-800 -my-0.5 z-10"></div>
+                                <!-- 자루 (Hilt) -->
+                                <div class="w-3 h-7 bg-stone-900 border border-stone-700 rounded-b-sm flex flex-col justify-between py-0.5 items-center">
+                                    <div class="w-full h-0.5 bg-amber-600/60"></div>
+                                    <div class="w-full h-0.5 bg-amber-600/60"></div>
+                                </div>
+                                <!-- 폼멜 (Pommel) -->
+                                <div class="w-4 h-2 bg-amber-600 rounded-full border border-amber-800 -mt-0.5"></div>
+                            </div>
+                            <span class="text-[10px] text-slate-400 mt-1">단검 (Athame)</span>
                         </div>
                     `;
                 case 'bell':
@@ -706,7 +748,7 @@
         // --- 5. 내보내기 & 불러오기 기능 ---
         function exportAltarData() {
             const exportData = {
-                version: "1.0",
+                version: "1.1",
                 exportDate: new Date().toISOString(),
                 theme: state.theme,
                 journal: document.getElementById('spell-journal').value,
@@ -754,23 +796,19 @@
                         return;
                     }
 
-                    // 제단 초기화 후 복원 실행
                     document.getElementById('altar-canvas').innerHTML = '';
                     state.items = [];
                     state.selectedItemId = null;
 
-                    // 테마 설정
                     if (newTheme) {
                         state.theme = newTheme;
                         document.body.classList.remove(...themes);
                         document.body.classList.add(`theme-${newTheme}`);
                     }
 
-                    // 노트 복원
                     document.getElementById('spell-journal').value = newJournal;
                     localStorage.setItem('cyber_altar_journal', newJournal);
 
-                    // 도구 아이템 재배치
                     if (newItems.length > 0) {
                         document.getElementById('empty-notice').classList.add('opacity-0');
                         newItems.forEach(item => addAltarItem(item.type, item));
@@ -859,21 +897,36 @@
             const candlePicker = document.getElementById('candle-color-picker-wrap');
             const crystalBtn = document.getElementById('crystal-select-btn');
             const title = document.getElementById('inspector-title');
+            const rotationSlider = document.getElementById('rotation-slider');
+            const rotationValue = document.getElementById('rotation-value');
 
             inspector.classList.remove('hidden');
             inspector.classList.add('flex');
+
+            // 회전 슬라이더 값 동기화
+            const currentRotation = item.rotation || 0;
+            rotationSlider.value = currentRotation;
+            rotationValue.innerText = `${currentRotation}°`;
 
             if (item.type === 'candle') {
                 candlePicker.classList.remove('hidden');
                 candlePicker.classList.add('flex');
                 crystalBtn.classList.add('hidden');
                 document.getElementById('candle-color-input').value = item.color || '#f59e06';
-                title.innerText = "양초 커스터마이징";
+                title.innerText = "양초 설정";
             } else if (item.type === 'crystal') {
                 candlePicker.classList.add('hidden');
                 crystalBtn.classList.remove('hidden');
                 crystalBtn.classList.add('flex');
                 title.innerText = `원석: ${item.customName}`;
+            } else if (item.type === 'athame') {
+                candlePicker.classList.add('hidden');
+                crystalBtn.classList.add('hidden');
+                title.innerText = "단검 (Athame) 설정";
+            } else if (item.type === 'wand') {
+                candlePicker.classList.add('hidden');
+                crystalBtn.classList.add('hidden');
+                title.innerText = "지팡이 설정";
             } else {
                 candlePicker.classList.add('hidden');
                 crystalBtn.classList.add('hidden');
@@ -973,6 +1026,37 @@
             document.getElementById('export-btn').addEventListener('click', exportAltarData);
             document.getElementById('import-btn').addEventListener('click', () => document.getElementById('file-input').click());
             document.getElementById('file-input').addEventListener('change', importAltarData);
+
+            // 회전 슬라이더 제어
+            const rotationSlider = document.getElementById('rotation-slider');
+            const rotationValue = document.getElementById('rotation-value');
+
+            const applyRotation = (deg) => {
+                if (!state.selectedItemId) return;
+                const item = state.items.find(i => i.id === state.selectedItemId);
+                if (item) {
+                    item.rotation = deg;
+                    const el = document.getElementById(item.id);
+                    if (el) {
+                        el.style.transform = `rotate(${deg}deg)`;
+                    }
+                    rotationSlider.value = deg;
+                    rotationValue.innerText = `${deg}°`;
+                }
+            };
+
+            rotationSlider.addEventListener('input', (e) => {
+                applyRotation(parseInt(e.target.value, 10));
+            });
+
+            document.getElementById('rotate-45-btn').addEventListener('click', () => {
+                if (!state.selectedItemId) return;
+                const item = state.items.find(i => i.id === state.selectedItemId);
+                if (item) {
+                    const newDeg = ((item.rotation || 0) + 45) % 360;
+                    applyRotation(newDeg);
+                }
+            });
 
             // Inspector: 색상 변경 (양초)
             document.getElementById('candle-color-input').addEventListener('input', (e) => {
