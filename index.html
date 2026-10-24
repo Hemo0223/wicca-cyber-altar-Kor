@@ -872,7 +872,7 @@
 
         // --- 7. 이벤트 바인딩 및 컨트롤 ---
         function setupEventListeners() {
-            // Inspector: 색상 변경 (양초)
+        // Inspector: 색상 변경 (양초)
             document.getElementById('candle-color-input').addEventListener('input', (e) => {
                 if (!state.selectedItemId) return;
                 const item = state.items.find(i => i.id === state.selectedItemId);
@@ -880,7 +880,9 @@
                     item.color = e.target.value;
                     const candleBody = document.getElementById(`candle-body-${item.id}`);
                     if (candleBody) {
-                        candleBody.style.background = `linear-gradient(to right, ${item.color}, #4C1D95)`;
+                        // 고정된 보라색(#4C1D95) 제거 후, 선택한 색상 하나만 적용
+                        candleBody.style.backgroundColor = item.color;
+                        candleBody.style.background = item.color; // linear-gradient 잔재 제거
                         candleBody.style.setProperty('--candle-glow-color', item.color);
                     }
                 }
