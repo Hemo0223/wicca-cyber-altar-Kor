@@ -608,14 +608,20 @@
         function getItemHTML(item) {
             switch(item.type) {
                 case 'candle':
+                    // 1. 변수 선언 (item.color가 없을 경우 대비한 기본값 지정)
+                    const candleColor = item.color || '#f59e06';
+
                     return `
                         <div class="relative flex flex-col items-center group">
                             <div class="flame-wrap h-6 flex items-end mb-0.5">
                                 <div class="flame" id="flame-${item.id}"></div>
                             </div>
-                            <div class="candle-body w-8 h-16 rounded-t-sm rounded-b-md shadow-lg border border-white/10 transition-colors" 
-                                 id="candle-body-${item.id}"
-                                 style="background: linear-gradient(to right, ${item.color}, #6B21A8); --candle-glow-color: ${item.color}"></div>
+                            <!-- 2. candle-body 태그 끝에 </div> 닫기 추가 -->
+                            <div class="candle-body w-8 h-16 rounded-t-sm rounded-b-md shadow-lg border border-white/10 transition-colors relative overflow-hidden" 
+                                id="candle-body-${item.id}"
+                                style="background-color: ${candleColor}; --candle-glow-color: ${candleColor}">
+                                <div class="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-black/30"></div>
+                            </div>
                             <span class="text-[10px] text-slate-400 mt-1 opacity-80">양초</span>
                         </div>
                     `;
@@ -873,17 +879,17 @@
         // --- 7. 이벤트 바인딩 및 컨트롤 ---
         function setupEventListeners() {
         // Inspector: 색상 변경 (양초)
-            document.getElementById('candle-color-input').addEventListener('input', (e) => {
-                if (!state.selectedItemId) return;
-                const item = state.items.find(i => i.id === state.selectedItemId);
-                if (item && item.type === 'candle') {
-                    item.color = e.target.value;
-                    const candleBody = document.getElementById(`candle-body-${item.id}`);
-                    if (candleBody) {
-                        // 고정된 보라색(#4C1D95) 제거 후, 선택한 색상 하나만 적용
-                        candleBody.style.backgroundColor = item.color;
-                        candleBody.style.background = item.color; // linear-gradient 잔재 제거
-                        candleBody.style.setProperty('--candle-glow-color', item.color);
+        document.getElementById('candle-color-input').addEventListener('input', (e) => {
+            if (!state.selectedItemId) return;
+            const item = state.items.find(i => i.id === state.selectedItemId);
+            if (item && item.type === 'candle') {
+                item.color = e.target.value;
+                const candleBody = document.getElementById(`candle-body-${item.id}`);
+                if (candleBody) {
+                    // 고정된 보라색(#4C1D95) 제거 후, 선택한 색상 하나만 적용
+                    candleBody.style.backgroundColor = item.color;
+                    candleBody.style.background = item.color; // linear-gradient 잔재 제거
+                    candleBody.style.setProperty('--candle-glow-color', item.color);
                     }
                 }
             });
