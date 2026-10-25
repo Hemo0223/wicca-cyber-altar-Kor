@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>사이버 제단 (Digital Cyber Altar)</title>
+    <title data-i18n="appTitle">사이버 제단 (Digital Cyber Altar)</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
@@ -178,8 +178,8 @@
                 <i data-lucide="sparkles" class="w-5 h-5"></i>
             </div>
             <div>
-                <h1 class="serif text-base md:text-lg font-semibold tracking-wide text-purple-100">디지털 사이버 제단</h1>
-                <p class="text-xs text-slate-400">솔리터리 위칸을 위한 신성한 공간</p>
+                <h1 class="serif text-base md:text-lg font-semibold tracking-wide text-purple-100" data-i18n="appTitle">디지털 사이버 제단</h1>
+                <p class="text-xs text-slate-400" data-i18n="appSubtitle">솔리터리 위칸을 위한 신성한 공간</p>
             </div>
         </div>
 
@@ -187,21 +187,29 @@
         <div class="hidden sm:flex items-center gap-6 text-xs text-slate-300 bg-black/20 px-4 py-2 rounded-full border border-white/5">
             <div class="flex items-center gap-2" id="moon-phase-widget">
                 <i data-lucide="moon" class="w-4 h-4 text-amber-200"></i>
-                <span id="moon-phase-text">달의 위상 계산 중...</span>
+                <span id="moon-phase-text" data-i18n="moonPhaseCalculating">달의 위상 계산 중...</span>
             </div>
             <div class="w-px h-3 bg-white/10"></div>
             <div class="flex items-center gap-2">
                 <i data-lucide="sun" class="w-4 h-4 text-amber-400"></i>
-                <span id="sabbat-text">사바트 정보</span>
+                <span id="sabbat-text" data-i18n="sabbatInfo">사밧 정보</span>
             </div>
         </div>
 
         <!-- 설정 및 파일 조작 컨트롤 -->
         <div class="flex items-center gap-2">
+            <!-- 수동 언어 변환 버튼 -->
+            <button id="lang-toggle-btn" onclick="toggleLanguage()" class="flex items-center gap-1 px-2.5 py-1.5 bg-indigo-500/20 hover:bg-indigo-500/30 text-xs text-indigo-200 rounded-xl border border-indigo-500/40 transition">
+                <i data-lucide="globe" class="w-3.5 h-3.5 text-indigo-300"></i>
+                <span id="lang-toggle-text" class="font-semibold">EN</span>
+            </button>
+
+            <div class="w-px h-4 bg-white/10 mx-1"></div>
+
             <!-- 룬 점 캐스팅 버튼 -->
             <button id="rune-btn" class="flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 text-xs text-amber-200 rounded-xl border border-amber-500/40 transition">
                 <i data-lucide="compass" class="w-4 h-4 text-amber-300"></i>
-                <span>룬 점 리딩</span>
+                <span data-i18n="runeReading">룬 점 리딩</span>
             </button>
 
             <div class="w-px h-4 bg-white/10 mx-1"></div>
@@ -209,11 +217,11 @@
             <!-- 파일 내보내기/불러오기 버튼 모음 -->
             <button id="export-btn" class="px-2.5 py-1.5 bg-purple-900/60 hover:bg-purple-800 text-xs text-purple-200 rounded-xl border border-purple-500/30 flex items-center gap-1 transition">
                 <i data-lucide="download" class="w-3.5 h-3.5"></i>
-                <span>내보내기</span>
+                <span data-i18n="export">내보내기</span>
             </button>
             <button id="import-btn" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 rounded-xl border border-slate-600 flex items-center gap-1 transition">
                 <i data-lucide="upload" class="w-3.5 h-3.5"></i>
-                <span>불러오기</span>
+                <span data-i18n="import">불러오기</span>
             </button>
             <input type="file" id="file-input" accept=".altar,.json,text/plain" style="display: none;">
 
@@ -224,7 +232,7 @@
             <!-- 3C 가이드 버튼 -->
             <button id="guide-btn" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/30 text-purple-200 text-xs font-medium transition">
                 <i data-lucide="book-open" class="w-4 h-4"></i>
-                <span class="hidden md:inline">3C 가이드</span>
+                <span class="hidden md:inline" data-i18n="guide3C">3C 가이드</span>
             </button>
         </div>
     </header>
@@ -236,66 +244,66 @@
         <aside class="glass-panel md:w-64 z-20 flex-shrink-0 flex flex-col p-3 border-b md:border-b-0 md:border-r border-white/10 max-h-[30vh] md:max-h-none overflow-y-auto">
             <div class="flex items-center justify-between mb-2">
                 <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                    <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> 도구 추가
+                    <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> <span data-i18n="addTools">도구 추가</span>
                 </h2>
-                <span class="text-[10px] text-slate-500">클릭하여 제단에 배치</span>
+                <span class="text-[10px] text-slate-500" data-i18n="placeOnAltarNotice">클릭하여 제단에 배치</span>
             </div>
 
             <!-- 배치 가능한 도구 목록 Grid -->
             <div class="grid grid-cols-3 md:grid-cols-2 gap-2">
                 <button onclick="addAltarItem('candle')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-white/5 hover:bg-purple-500/10 border border-white/5 hover:border-purple-500/30 text-xs text-slate-300 transition group">
                     <i data-lucide="flame" class="w-5 h-5 mb-1 text-amber-400 group-hover:scale-110 transition"></i>
-                    <span>양초</span>
+                    <span data-i18n="tools.candle">양초</span>
                 </button>
 
                 <button onclick="addAltarItem('incense')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-white/5 hover:bg-purple-500/10 border border-white/5 hover:border-purple-500/30 text-xs text-slate-300 transition group">
                     <i data-lucide="wind" class="w-5 h-5 mb-1 text-slate-300 group-hover:scale-110 transition"></i>
-                    <span>향로</span>
+                    <span data-i18n="tools.incense">향로</span>
                 </button>
 
                 <button onclick="addAltarItem('chalice')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-white/5 hover:bg-purple-500/10 border border-white/5 hover:border-purple-500/30 text-xs text-slate-300 transition group">
                     <i data-lucide="wine" class="w-5 h-5 mb-1 text-cyan-400 group-hover:scale-110 transition"></i>
-                    <span>성수 잔</span>
+                    <span data-i18n="tools.chalice">성수 잔</span>
                 </button>
 
                 <button onclick="addAltarItem('pentacle')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-white/5 hover:bg-purple-500/10 border border-white/5 hover:border-purple-500/30 text-xs text-slate-300 transition group">
                     <i data-lucide="disc" class="w-5 h-5 mb-1 text-purple-400 group-hover:scale-110 transition"></i>
-                    <span>펜타클</span>
+                    <span data-i18n="tools.pentacle">펜타클</span>
                 </button>
 
                 <button onclick="addAltarItem('crystal')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-white/5 hover:bg-purple-500/10 border border-white/5 hover:border-purple-500/30 text-xs text-slate-300 transition group">
                     <i data-lucide="gem" class="w-5 h-5 mb-1 text-pink-400 group-hover:scale-110 transition"></i>
-                    <span>원석/수정</span>
+                    <span data-i18n="tools.crystal">원석/수정</span>
                 </button>
 
                 <button onclick="addAltarItem('wand')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-white/5 hover:bg-purple-500/10 border border-white/5 hover:border-purple-500/30 text-xs text-slate-300 transition group">
                     <i data-lucide="wand-2" class="w-5 h-5 mb-1 text-emerald-400 group-hover:scale-110 transition"></i>
-                    <span>완드</span>
+                    <span data-i18n="tools.wand">완드</span>
                 </button>
 
                 <button onclick="addAltarItem('athame')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-white/5 hover:bg-purple-500/10 border border-white/5 hover:border-purple-500/30 text-xs text-slate-300 transition group">
                     <i data-lucide="sword" class="w-5 h-5 mb-1 text-slate-200 group-hover:scale-110 transition"></i>
-                    <span>단검</span>
+                    <span data-i18n="tools.athame">단검</span>
                 </button>
 
                 <button onclick="addAltarItem('bell')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-white/5 hover:bg-purple-500/10 border border-white/5 hover:border-purple-500/30 text-xs text-slate-300 transition group">
                     <i data-lucide="bell" class="w-5 h-5 mb-1 text-yellow-300 group-hover:scale-110 transition"></i>
-                    <span>정화 종</span>
+                    <span data-i18n="tools.bell">정화 종</span>
                 </button>
 
                 <button onclick="addAltarItem('bowl')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-white/5 hover:bg-purple-500/10 border border-white/5 hover:border-purple-500/30 text-xs text-slate-300 transition group">
                     <i data-lucide="circle-dot" class="w-5 h-5 mb-1 text-amber-200 group-hover:scale-110 transition"></i>
-                    <span>소금 그릇</span>
+                    <span data-i18n="tools.bowl">소금 그릇</span>
                 </button>
             </div>
 
             <!-- 제단 전체 관리 버튼 -->
             <div class="mt-auto pt-3 border-t border-white/10 flex gap-2">
                 <button onclick="saveAltarLayout()" class="flex-1 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs text-slate-300 flex items-center justify-center gap-1">
-                    <i data-lucide="save" class="w-3.5 h-3.5"></i> 저장
+                    <i data-lucide="save" class="w-3.5 h-3.5"></i> <span data-i18n="save">저장</span>
                 </button>
                 <button onclick="clearAltar()" class="py-2 px-3 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-xs text-red-300 flex items-center justify-center gap-1">
-                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> 초기화
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> <span data-i18n="reset">초기화</span>
                 </button>
             </div>
         </aside>
@@ -305,8 +313,8 @@
             <!-- 안내 문구 -->
             <div id="empty-notice" class="absolute inset-0 flex flex-col items-center justify-center text-slate-500 pointer-events-none transition-opacity duration-300">
                 <i data-lucide="sparkles" class="w-10 h-10 mb-2 opacity-30"></i>
-                <p class="text-sm font-light">왼쪽 도구함에서 제단에 올릴 아이템을 선택하세요.</p>
-                <p class="text-xs opacity-60">아이템을 드래그하여 자유롭게 배치할 수 있습니다.</p>
+                <p class="text-sm font-light" data-i18n="emptyNotice">왼쪽 도구함에서 제단에 올릴 아이템을 선택하세요.</p>
+                <p class="text-xs opacity-60" data-i18n="emptyNoticeSub">아이템을 드래그하여 자유롭게 배치할 수 있습니다.</p>
             </div>
 
             <!-- 배치된 도구가 올려지는 레이어 -->
@@ -315,14 +323,14 @@
             <!-- 선택된 아이템 전용 커스텀 설정 패널 -->
             <div id="item-inspector" class="absolute bottom-4 left-1/2 -translate-x-1/2 glass-panel rounded-2xl px-4 py-2.5 hidden flex-wrap items-center gap-3 z-30 shadow-2xl border border-purple-500/30 max-w-[95%] sm:max-w-none">
                 <span id="inspector-title" class="text-xs font-semibold text-purple-200 flex items-center gap-1.5">
-                    <i data-lucide="sliders" class="w-3.5 h-3.5"></i> 아이템 설정
+                    <i data-lucide="sliders" class="w-3.5 h-3.5"></i> <span data-i18n="inspector.title">아이템 설정</span>
                 </span>
 
                 <!-- 회전 제어 슬라이더 & 버튼 -->
                 <div class="flex items-center gap-2 bg-white/5 px-2.5 py-1 rounded-xl border border-white/10">
                     <label class="text-[11px] text-slate-300 flex items-center gap-1">
                         <i data-lucide="rotate-cw" class="w-3 h-3 text-purple-300"></i>
-                        <span>회전:</span>
+                        <span data-i18n="inspector.rotation">회전:</span>
                     </label>
                     <input type="range" id="rotation-slider" min="0" max="360" value="0" class="w-20 sm:w-24 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-purple-400">
                     <span id="rotation-value" class="text-[10px] text-purple-200 w-7 text-right">0°</span>
@@ -333,23 +341,23 @@
 
                 <!-- 양초 색상 선택 도구 -->
                 <div id="candle-color-picker-wrap" class="flex items-center gap-2 hidden">
-                    <label class="text-xs text-slate-400">초 색상:</label>
+                    <label class="text-xs text-slate-400" data-i18n="inspector.candleColor">초 색상:</label>
                     <input type="color" id="candle-color-input" value="#f59e06" class="w-7 h-7 rounded-lg bg-transparent border-0 cursor-pointer">
                 </div>
 
                 <!-- 원석 종류 선택 버튼 -->
                 <button id="crystal-select-btn" class="px-2.5 py-1 rounded-lg bg-pink-500/20 hover:bg-pink-500/30 text-xs text-pink-200 hidden flex items-center gap-1">
-                    <i data-lucide="gem" class="w-3 h-3"></i> <span>원석 종류/이름 변경</span>
+                    <i data-lucide="gem" class="w-3 h-3"></i> <span data-i18n="inspector.changeCrystal">원석 종류/이름 변경</span>
                 </button>
 
                 <!-- 불꽃 / 연기 토글 -->
                 <button id="inspector-toggle-btn" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-xs text-slate-200 flex items-center gap-1">
-                    <i data-lucide="power" class="w-3 h-3"></i> <span id="toggle-btn-label">작동 토글</span>
+                    <i data-lucide="power" class="w-3 h-3"></i> <span id="toggle-btn-label" data-i18n="inspector.toggleState">작동 토글</span>
                 </button>
 
                 <!-- 삭제 버튼 -->
                 <button id="inspector-delete-btn" class="px-2.5 py-1 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-xs text-red-300 flex items-center gap-1">
-                    <i data-lucide="x" class="w-3 h-3"></i> 제거
+                    <i data-lucide="x" class="w-3 h-3"></i> <span data-i18n="inspector.remove">제거</span>
                 </button>
             </div>
         </section>
@@ -358,23 +366,23 @@
         <aside class="glass-panel md:w-72 z-20 flex-shrink-0 flex flex-col p-4 border-t md:border-t-0 md:border-l border-white/10 max-h-[35vh] md:max-h-none">
             <div class="flex items-center justify-between mb-3">
                 <h2 class="text-xs font-semibold uppercase tracking-wider text-purple-300 flex items-center gap-1.5">
-                    <i data-lucide="feather" class="w-3.5 h-3.5"></i> 리추얼 노트 & 의도
+                    <i data-lucide="feather" class="w-3.5 h-3.5"></i> <span data-i18n="journal.title">리추얼 노트 & 의도</span>
                 </h2>
-                <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full">자동 저장</span>
+                <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full" data-i18n="journal.autoSaved">자동 저장</span>
             </div>
 
-            <p class="text-xs text-slate-400 mb-2">오늘의 축원, 소원, 혹은 3C 의식 기록을 작성하세요.</p>
+            <p class="text-xs text-slate-400 mb-2" data-i18n="journal.subtitle">오늘의 축원, 소원, 혹은 3C 의식 기록을 작성하세요.</p>
 
-            <textarea id="spell-journal" placeholder="예: '이번 만월의 기운을 빌어 내면의 불안을 정화하고 평온을 끌어당깁니다...'" class="w-full flex-1 bg-black/30 border border-white/10 rounded-xl p-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-purple-500/50 resize-none leading-relaxed mb-3"></textarea>
+            <textarea id="spell-journal" data-i18n-placeholder="journal.placeholder" placeholder="예: '이번 만월의 기운을 빌어 내면의 불안을 정화하고 평온을 끌어당깁니다...'" class="w-full flex-1 bg-black/30 border border-white/10 rounded-xl p-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-purple-500/50 resize-none leading-relaxed mb-3"></textarea>
 
             <div class="flex items-center justify-between text-[11px] text-slate-500">
-                <span id="journal-status">저장 완료</span>
-                <button onclick="clearJournal()" class="hover:text-slate-300 transition">지우기</button>
+                <span id="journal-status" data-i18n="journal.saved">저장 완료</span>
+                <button onclick="clearJournal()" class="hover:text-slate-300 transition" data-i18n="journal.clear">지우기</button>
             </div>
         </aside>
     </main>
 
-    <!-- 룬 점 모달 -->
+    <!-- 룬 점(Rune Reading) 모달 -->
     <div id="rune-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
         <div class="glass-panel max-w-xl w-full rounded-2xl p-6 relative border border-amber-500/30 shadow-2xl flex flex-col max-h-[90vh]">
             <!-- 닫기 버튼 -->
@@ -388,24 +396,24 @@
                     <i data-lucide="compass" class="w-6 h-6"></i>
                 </div>
                 <div>
-                    <h3 class="serif text-lg font-semibold text-amber-100">엘더 푸사르크 룬 캐스팅</h3>
-                    <p class="text-xs text-slate-400">룬 점을 시작합니다</p>
+                    <h3 class="serif text-lg font-semibold text-amber-100" data-i18n="runeModal.title">엘더 푸사르크 룬 캐스팅</h3>
+                    <p class="text-xs text-slate-400" data-i18n="runeModal.subtitle">룬 점을 시작합니다</p>
                 </div>
             </div>
 
             <!-- 스프레드 선택 탭 -->
             <div class="grid grid-cols-3 gap-2 mb-5">
                 <button onclick="drawRunes('yesno')" class="rune-spread-tab py-2 px-3 rounded-xl bg-white/5 hover:bg-amber-500/20 border border-white/10 text-xs font-medium text-slate-300 transition" id="tab-yesno">
-                    <div class="font-semibold text-amber-200">YES / NO</div>
-                    <div class="text-[10px] text-slate-400">1개 룬 추첨</div>
+                    <div class="font-semibold text-amber-200" data-i18n="runeModal.yesNoTab">YES / NO</div>
+                    <div class="text-[10px] text-slate-400" data-i18n="runeModal.yesNoSub">1개 룬 추첨</div>
                 </button>
                 <button onclick="drawRunes('three')" class="rune-spread-tab py-2 px-3 rounded-xl bg-white/5 hover:bg-amber-500/20 border border-white/10 text-xs font-medium text-slate-300 transition" id="tab-three">
-                    <div class="font-semibold text-amber-200">3개 스프레드</div>
-                    <div class="text-[10px] text-slate-400">과거 / 현재 / 미래</div>
+                    <div class="font-semibold text-amber-200" data-i18n="runeModal.threeSpreadTab">3개 스프레드</div>
+                    <div class="text-[10px] text-slate-400" data-i18n="runeModal.threeSpreadSub">과거 / 현재 / 미래</div>
                 </button>
                 <button onclick="drawRunes('five')" class="rune-spread-tab py-2 px-3 rounded-xl bg-white/5 hover:bg-amber-500/20 border border-white/10 text-xs font-medium text-slate-300 transition" id="tab-five">
-                    <div class="font-semibold text-amber-200">5개 스프레드</div>
-                    <div class="text-[10px] text-slate-400">종합 서사 리딩</div>
+                    <div class="font-semibold text-amber-200" data-i18n="runeModal.fiveSpreadTab">5개 스프레드</div>
+                    <div class="text-[10px] text-slate-400" data-i18n="runeModal.fiveSpreadSub">종합 서사 리딩</div>
                 </button>
             </div>
 
@@ -413,7 +421,7 @@
             <div id="rune-result-container" class="flex-1 overflow-y-auto my-2 pr-1 flex flex-col justify-center min-h-[180px]">
                 <div class="text-center text-slate-500 py-8">
                     <i data-lucide="sparkles" class="w-8 h-8 mx-auto mb-2 opacity-40"></i>
-                    <p class="text-xs">상단의 스프레드 버튼을 눌러 룬을 뽑으세요.</p>
+                    <p class="text-xs" data-i18n="runeModal.initialNotice">상단의 스프레드 버튼을 눌러 룬을 뽑으세요.</p>
                 </div>
             </div>
 
@@ -421,11 +429,11 @@
             <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
                 <button id="send-to-journal-btn" class="px-4 py-2 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/40 text-purple-200 text-xs font-medium flex items-center gap-1.5 transition hidden">
                     <i data-lucide="feather" class="w-4 h-4"></i>
-                    <span>결과를 리추얼 노트로 전송</span>
+                    <span data-i18n="runeModal.sendToJournal">결과를 리추얼 노트로 전송</span>
                 </button>
                 <button id="redraw-rune-btn" onclick="redrawCurrentSpread()" class="ml-auto px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-amber-950 text-xs font-semibold flex items-center gap-1.5 transition shadow-lg shadow-amber-600/20">
                     <i data-lucide="rotate-cw" class="w-4 h-4"></i>
-                    <span>다시 뽑기</span>
+                    <span data-i18n="runeModal.redraw">다시 뽑기</span>
                 </button>
             </div>
         </div>
@@ -443,38 +451,35 @@
                     <i data-lucide="sparkles" class="w-5 h-5"></i>
                 </div>
                 <div>
-                    <h3 class="serif text-base font-semibold text-purple-100">도구 사용의 3C 필수 의식</h3>
-                    <p class="text-xs text-slate-400">Cleansing · Consecration · Charging</p>
+                    <h3 class="serif text-base font-semibold text-purple-100" data-i18n="guideModal.title">도구 사용의 3C 필수 의식</h3>
+                    <p class="text-xs text-slate-400" data-i18n="guideModal.subtitle">Cleansing · Consecration · Charging</p>
                 </div>
             </div>
 
             <div class="space-y-4 text-xs text-slate-300 leading-relaxed max-h-[60vh] overflow-y-auto pr-1">
                 <div class="bg-white/5 p-3.5 rounded-xl border border-white/5">
-                    <h4 class="font-semibold text-purple-300 mb-1 flex items-center gap-1.5">
-                        <span class="w-5 h-5 rounded-full bg-purple-500/20 text-purple-300 flex items-center justify-center text-[10px]">1</span>
+                    <h4 class="font-semibold text-purple-300 mb-1 flex items-center gap-1.5" data-i18n="guideModal.step1Title">
                         1. Cleansing (정화)
                     </h4>
-                    <p class="text-slate-400">도구에 남아있는 잔여 에너지를 씻어내어 초기화 상태로 만듭니다. 연기 정화(향)나 소금위에 두어 실행합니다.</p>
+                    <p class="text-slate-400" data-i18n="guideModal.step1Desc">도구에 남아있는 잔여 에너지를 씻어내어 초기화 상태로 만듭니다. 연기 정화(향)나 소금위에 두어 실행합니다.</p>
                 </div>
 
                 <div class="bg-white/5 p-3.5 rounded-xl border border-white/5">
-                    <h4 class="font-semibold text-purple-300 mb-1 flex items-center gap-1.5">
-                        <span class="w-5 h-5 rounded-full bg-purple-500/20 text-purple-300 flex items-center justify-center text-[10px]">2</span>
+                    <h4 class="font-semibold text-purple-300 mb-1 flex items-center gap-1.5" data-i18n="guideModal.step2Title">
                         2. Consecration (축성)
                     </h4>
-                    <p class="text-slate-400">도구를 단순한 물건에서 '마법적 목적을 가진 성물'로 지정합니다. 4원소(지·수·화·풍)의 기운을 쐬어주며 의도를 선언합니다.</p>
+                    <p class="text-slate-400" data-i18n="guideModal.step2Desc">도구를 단순한 물건에서 '마법적 목적을 가진 성물'로 지정합니다. 4원소의 기운을 쐬어주며 의도를 선언합니다.</p>
                 </div>
 
                 <div class="bg-white/5 p-3.5 rounded-xl border border-white/5">
-                    <h4 class="font-semibold text-purple-300 mb-1 flex items-center gap-1.5">
-                        <span class="w-5 h-5 rounded-full bg-purple-500/20 text-purple-300 flex items-center justify-center text-[10px]">3</span>
+                    <h4 class="font-semibold text-purple-300 mb-1 flex items-center gap-1.5" data-i18n="guideModal.step3Title">
                         3. Charging (충전)
                     </h4>
-                    <p class="text-slate-400">축성된 도구에 목적에 맞는 에너지를 주입합니다. 만월의 달빛 아래 노출시키거나 손으로 에너지를 주입하는 시각화를 진행합니다.</p>
+                    <p class="text-slate-400" data-i18n="guideModal.step3Desc">축성된 도구에 목적에 맞는 에너지를 주입합니다. 만월의 달빛 아래 노출시키거나 손으로 에너지를 주입하는 시각화를 진행합니다.</p>
                 </div>
             </div>
 
-            <button id="confirm-guide-btn" class="w-full mt-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-xs font-medium text-white transition shadow-lg shadow-purple-600/30">
+            <button id="confirm-guide-btn" class="w-full mt-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-xs font-medium text-white transition shadow-lg shadow-purple-600/30" data-i18n="guideModal.confirm">
                 확인 및 제단으로 돌아가기
             </button>
         </div>
@@ -492,8 +497,8 @@
                     <i data-lucide="gem" class="w-5 h-5"></i>
                 </div>
                 <div>
-                    <h3 class="serif text-base font-semibold text-pink-100">원석 및 파워스톤 선택</h3>
-                    <p class="text-xs text-slate-400">목적과 리추얼 의도에 맞는 원석을 고르세요</p>
+                    <h3 class="serif text-base font-semibold text-pink-100" data-i18n="crystalModal.title">원석 및 파워스톤 선택</h3>
+                    <p class="text-xs text-slate-400" data-i18n="crystalModal.subtitle">목적과 리추얼 의도에 맞는 원석을 고르세요</p>
                 </div>
             </div>
 
@@ -502,10 +507,10 @@
 
             <!-- 사용자 지정 이름 입력 -->
             <div class="mt-4 pt-3 border-t border-white/10">
-                <label class="block text-xs font-medium text-slate-300 mb-1.5">직접 이름 지정하기 (커스텀)</label>
+                <label class="block text-xs font-medium text-slate-300 mb-1.5" data-i18n="crystalModal.customLabel">직접 이름 지정하기 (커스텀)</label>
                 <div class="flex gap-2">
-                    <input type="text" id="custom-crystal-input" placeholder="예: 무지개 아쿠아마린" class="flex-1 bg-black/40 border border-white/15 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-pink-500/50">
-                    <button id="apply-custom-crystal-btn" class="px-4 py-2 bg-pink-600 hover:bg-pink-500 text-xs font-medium text-white rounded-xl transition">
+                    <input type="text" id="custom-crystal-input" data-i18n-placeholder="crystalModal.customPlaceholder" placeholder="예: 무지개 아쿠아마린" class="flex-1 bg-black/40 border border-white/15 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-pink-500/50">
+                    <button id="apply-custom-crystal-btn" class="px-4 py-2 bg-pink-600 hover:bg-pink-500 text-xs font-medium text-white rounded-xl transition" data-i18n="crystalModal.apply">
                         적용
                     </button>
                 </div>
@@ -515,6 +520,262 @@
 
     <!-- JavaScript 로직 -->
     <script>
+        // --- 0. 다국어(i18n) 내장 데이터 (비동기 JSON 파일 로드 실패 시 폴백 지원) ---
+        const embeddedTranslations = {
+            ko: {
+                appTitle: "디지털 사이버 제단",
+                appSubtitle: "솔리터리 위칸을 위한 신성한 공간",
+                moonPhaseCalculating: "달의 위상 계산 중...",
+                sabbatInfo: "사밧 정보",
+                sabbatSeasonPrefix: "현재 시즌: ",
+                runeReading: "룬 점 리딩",
+                export: "내보내기",
+                import: "불러오기",
+                guide3C: "3C 가이드",
+                addTools: "도구 추가",
+                placeOnAltarNotice: "클릭하여 제단에 배치",
+                tools: {
+                    candle: "양초",
+                    incense: "정화 향로",
+                    chalice: "성수 잔",
+                    pentacle: "펜타클",
+                    crystal: "원석/수정",
+                    wand: "완드",
+                    athame: "단검",
+                    bell: "정화 종",
+                    bowl: "소금 그릇"
+                },
+                save: "저장",
+                reset: "초기화",
+                emptyNotice: "왼쪽 도구함에서 제단에 올릴 아이템을 선택하세요.",
+                emptyNoticeSub: "아이템을 드래그하여 자유롭게 배치할 수 있습니다.",
+                inspector: {
+                    title: "아이템 설정",
+                    candleTitle: "양초 설정",
+                    athameTitle: "단검 설정",
+                    wandTitle: "완드 설정",
+                    rotation: "회전:",
+                    candleColor: "초 색상:",
+                    changeCrystal: "원석 종류/이름 변경",
+                    toggleState: "작동 토글",
+                    remove: "제거"
+                },
+                journal: {
+                    title: "리추얼 노트 & 의도",
+                    autoSaved: "자동 저장",
+                    subtitle: "오늘의 축원, 소원, 혹은 3C 의식 기록을 작성하세요.",
+                    placeholder: "예: '이번 만월의 기운을 빌어 내면의 불안을 정화하고 평온을 끌어당깁니다...'",
+                    saved: "저장 완료",
+                    saving: "저장 중...",
+                    clear: "지우기"
+                },
+                runeModal: {
+                    title: "엘더 푸사르크 룬 캐스팅",
+                    subtitle: "룬 점을 시작합니다",
+                    yesNoTab: "YES / NO",
+                    yesNoSub: "1개 룬 추첨",
+                    threeSpreadTab: "3개 스프레드",
+                    threeSpreadSub: "과거 / 현재 / 미래",
+                    fiveSpreadTab: "5개 스프레드",
+                    fiveSpreadSub: "종합 서사 리딩",
+                    initialNotice: "상단의 스프레드 버튼을 눌러 룬을 뽑으세요.",
+                    sendToJournal: "결과를 리추얼 노트로 전송",
+                    redraw: "다시 뽑기",
+                    answerYes: "YES (긍정 / 진행)",
+                    answerNo: "NO (신중 / 보류)",
+                    reversed: "역방향",
+                    upright: "정방향",
+                    labels3: ["1. 과거", "2. 현재", "3. 미래"],
+                    labels5: ["1. 현재 상황", "2. 원인 / 제약", "3. 핵심 방향", "4. 여정 / 변화", "5. 최종 결과"]
+                },
+                guideModal: {
+                    title: "도구 사용의 3C 필수 의식",
+                    subtitle: "Cleansing · Consecration · Charging",
+                    step1Title: "1. Cleansing (정화)",
+                    step1Desc: "도구에 남아있는 잔여 에너지를 씻어내어 초기화 상태로 만듭니다. 연기 정화(향)나 소금위에 두어 실행합니다.",
+                    step2Title: "2. Consecration (축성)",
+                    step2Desc: "도구를 단순한 물건에서 '마법적 목적을 가진 성물'로 지정합니다. 4원소의 기운을 쐬어주며 의도를 선언합니다.",
+                    step3Title: "3. Charging (충전)",
+                    step3Desc: "축성된 도구에 목적에 맞는 에너지를 주입합니다. 만월의 달빛 아래 노출시키거나 손으로 에너지를 주입하는 시각화를 진행합니다.",
+                    confirm: "확인 및 제단으로 돌아가기"
+                },
+                crystalModal: {
+                    title: "원석 및 파워스톤 선택",
+                    subtitle: "목적과 리추얼 의도에 맞는 원석을 고르세요",
+                    customLabel: "직접 이름 지정하기 (커스텀)",
+                    customPlaceholder: "예: 무지개 아쿠아마린",
+                    apply: "적용"
+                },
+                messages: {
+                    saved: "현재 제단 배치와 테마가 성공적으로 저장되었습니다.",
+                    importSuccess: "제단 데이터를 성공적으로 불러왔습니다!",
+                    importError: "올바르지 않은 제단 데이터 파일입니다.",
+                    parseError: "파일을 파싱하는 중 오류가 발생했습니다.",
+                    clearConfirm: "제단의 모든 도구를 지우시겠습니까?",
+                    clearJournalConfirm: "작성하신 노트를 지우시겠습니까?",
+                    runeSaved: "룬 점 결과가 리추얼 노트에 기록되었습니다."
+                }
+            },
+            en: {
+                appTitle: "Digital Cyber Altar",
+                appSubtitle: "A Sacred Space for Solitary Wiccans",
+                moonPhaseCalculating: "Calculating Moon Phase...",
+                sabbatInfo: "Sabbat Info",
+                sabbatSeasonPrefix: "Current Season: ",
+                runeReading: "Rune Reading",
+                export: "Export",
+                import: "Import",
+                guide3C: "3C Guide",
+                addTools: "Add Tools",
+                placeOnAltarNotice: "Click to place on altar",
+                tools: {
+                    candle: "Candle",
+                    incense: "Censer",
+                    chalice: "Chalice",
+                    pentacle: "Pentacle",
+                    crystal: "Crystal",
+                    wand: "Wand",
+                    athame: "Athame",
+                    bell: "Bell",
+                    bowl: "Salt Bowl"
+                },
+                save: "Save",
+                reset: "Reset",
+                emptyNotice: "Select items from the toolkit on the left to place on the altar.",
+                emptyNoticeSub: "You can drag and arrange items freely.",
+                inspector: {
+                    title: "Item Settings",
+                    candleTitle: "Candle Settings",
+                    athameTitle: "Athame Settings",
+                    wandTitle: "Wand Settings",
+                    rotation: "Rotation:",
+                    candleColor: "Candle Color:",
+                    changeCrystal: "Change Crystal / Name",
+                    toggleState: "Toggle State",
+                    remove: "Remove"
+                },
+                journal: {
+                    title: "Ritual Notes & Intentions",
+                    autoSaved: "Auto-saved",
+                    subtitle: "Record your daily blessings, wishes, or 3C ritual notes.",
+                    placeholder: "e.g., 'Drawing upon the full moon's energy to cleanse inner anxiety and channel peace...'",
+                    saved: "Saved",
+                    saving: "Saving...",
+                    clear: "Clear"
+                },
+                runeModal: {
+                    title: "Elder Futhark Rune Casting",
+                    subtitle: "Begin a rune reading imbued with ancient wisdom",
+                    yesNoTab: "YES / NO",
+                    yesNoSub: "1 Rune Draw",
+                    threeSpreadTab: "3-Rune Spread",
+                    threeSpreadSub: "Past / Present / Future",
+                    fiveSpreadTab: "5-Rune Spread",
+                    fiveSpreadSub: "Full Narrative Reading",
+                    initialNotice: "Click a spread button above to draw runes.",
+                    sendToJournal: "Send to Ritual Notes",
+                    redraw: "Redraw",
+                    answerYes: "YES (Affirmative)",
+                    answerNo: "NO (Caution / Hold)",
+                    reversed: "Reversed",
+                    upright: "Upright",
+                    labels3: ["1. Past", "2. Present", "3. Future"],
+                    labels5: ["1. Present State", "2. Cause / Constraint", "3. Core Direction", "4. Journey / Change", "5. Final Outcome"]
+                },
+                guideModal: {
+                    title: "The 3Cs Ritual Guide for Tools",
+                    subtitle: "Cleansing · Consecration · Charging",
+                    step1Title: "1. Cleansing",
+                    step1Desc: "Clears lingering residual energy from the tool to reset it to a neutral state. Performed using smoke (incense) or by placing it on salt.",
+                    step2Title: "2. Consecration",
+                    step2Desc: "Dedicates an ordinary item as a sacred object with magical purpose. Performed by exposing it to the 4 elements while stating your intention.",
+                    step3Title: "3. Charging",
+                    step3Desc: "Infuses the consecrated tool with energy matching your purpose. Done by exposing it to full moon light or visualizing energy flow through your hands.",
+                    confirm: "Confirm & Return to Altar"
+                },
+                crystalModal: {
+                    title: "Select Crystal & Powerstone",
+                    subtitle: "Choose a crystal that matches your purpose and ritual intention",
+                    customLabel: "Custom Name",
+                    customPlaceholder: "e.g., Rainbow Aquamarine",
+                    apply: "Apply"
+                },
+                messages: {
+                    saved: "Your altar layout and theme have been saved successfully.",
+                    importSuccess: "Altar data imported successfully!",
+                    importError: "Invalid altar data file.",
+                    parseError: "An error occurred while parsing the file.",
+                    clearConfirm: "Are you sure you want to clear all tools from the altar?",
+                    clearJournalConfirm: "Are you sure you want to clear your notes?",
+                    runeSaved: "Rune reading results have been saved to your Ritual Notes."
+                }
+            }
+        };
+
+        let currentLang = 'ko';
+        let translations = { ...embeddedTranslations };
+
+        // --- 다국어 시스템 코어 함수 ---
+        function getNestedTranslation(obj, keyPath) {
+            return keyPath.split('.').reduce((acc, part) => acc && acc[part], obj);
+        }
+
+        async function loadLanguageData(lang) {
+            try {
+                const response = await fetch(`./${lang}.json`);
+                if (response.ok) {
+                    const data = await response.json();
+                    translations[lang] = data;
+                }
+            } catch (e) {
+                // 외부 파일 없을 시 내장(embedded) 데이터 사용
+            }
+            applyLanguage(lang);
+        }
+
+        function applyLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('altar_lang', lang);
+            document.documentElement.lang = lang;
+
+            const t = translations[lang] || embeddedTranslations[lang];
+
+            // 텍스트 변환 ([data-i18n])
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const text = getNestedTranslation(t, key);
+                if (text) el.innerText = text;
+            });
+
+            // Placeholder 변환 ([data-i18n-placeholder])
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                const placeholder = getNestedTranslation(t, key);
+                if (placeholder) el.placeholder = placeholder;
+            });
+
+            // 언어 변경 버튼 라벨 갱신
+            const langText = document.getElementById('lang-toggle-text');
+            if (langText) langText.innerText = lang === 'ko' ? 'EN' : 'KO';
+
+            // 동적 UI 요소 업데이트
+            calculateMoonAndSabbat();
+            renderCrystalPresets();
+            if (state.selectedItemId) selectItem(state.selectedItemId);
+        }
+
+        function toggleLanguage() {
+            const nextLang = currentLang === 'ko' ? 'en' : 'ko';
+            loadLanguageData(nextLang);
+        }
+
+        function getInitialLanguage() {
+            const saved = localStorage.getItem('altar_lang');
+            if (saved) return saved;
+            const userLang = (navigator.language || navigator.userLanguage || 'ko').toLowerCase();
+            return userLang.startsWith('ko') ? 'ko' : 'en';
+        }
+
         // --- 24개 고대 엘더 푸사르크 룬 데이터베이스 ---
         const RUNE_DATABASE = [
             { symbol: 'ᚠ', name: 'Fehu', krName: '페후', reversible: true },
@@ -545,12 +806,12 @@
 
         // --- 1. 대표 원석 데이터베이스 ---
         const CRYSTAL_PRESETS = [
-            { id: 'amethyst', name: '자수정 (Amethyst)', desc: '영성, 영적 보호, 명상', color: '#C084FC', aura: 'rgba(192, 132, 252, 0.7)', bg: 'rgba(192, 132, 252, 0.15)', border: 'rgba(192, 132, 252, 0.4)' },
-            { id: 'rosequartz', name: '장미수정 (Rose Quartz)', desc: '사랑, 자애, 정서적 치유', color: '#F472B6', aura: 'rgba(244, 114, 182, 0.7)', bg: 'rgba(244, 114, 182, 0.15)', border: 'rgba(244, 114, 182, 0.4)' },
-            { id: 'clearquartz', name: '백수정 (Clear Quartz)', desc: '에너지 증폭, 명확함, 정화', color: '#F8FAFC', aura: 'rgba(248, 250, 252, 0.8)', bg: 'rgba(248, 250, 252, 0.15)', border: 'rgba(248, 250, 252, 0.4)' },
-            { id: 'obsidian', name: '흑요석 (Obsidian)', desc: '강력한 액막이, 음기 차단, 라포 형성', color: '#64748B', aura: 'rgba(71, 85, 105, 0.9)', bg: 'rgba(30, 41, 59, 0.4)', border: 'rgba(100, 116, 139, 0.5)' },
-            { id: 'citrine', name: '황수정 (Citrine)', desc: '풍요, 성공, 태양 에너지', color: '#FACC15', aura: 'rgba(250, 204, 21, 0.7)', bg: 'rgba(250, 204, 21, 0.15)', border: 'rgba(250, 204, 21, 0.4)' },
-            { id: 'lapis', name: '청금석 (Lapis Lazuli)', desc: '지혜, 직관, 진실', color: '#38BDF8', aura: 'rgba(56, 189, 248, 0.7)', bg: 'rgba(56, 189, 248, 0.15)', border: 'rgba(56, 189, 248, 0.4)' }
+            { id: 'amethyst', name: { ko: '자수정 (Amethyst)', en: 'Amethyst' }, desc: { ko: '영성, 영적 보호, 명상', en: 'Spirituality, Protection, Meditation' }, color: '#C084FC', aura: 'rgba(192, 132, 252, 0.7)', bg: 'rgba(192, 132, 252, 0.15)', border: 'rgba(192, 132, 252, 0.4)' },
+            { id: 'rosequartz', name: { ko: '장미수정 (Rose Quartz)', en: 'Rose Quartz' }, desc: { ko: '사랑, 자애, 정서적 치유', en: 'Love, Self-Compassion, Emotional Healing' }, color: '#F472B6', aura: 'rgba(244, 114, 182, 0.7)', bg: 'rgba(244, 114, 182, 0.15)', border: 'rgba(244, 114, 182, 0.4)' },
+            { id: 'clearquartz', name: { ko: '백수정 (Clear Quartz)', en: 'Clear Quartz' }, desc: { ko: '에너지 증폭, 명확함, 정화', en: 'Energy Amplification, Clarity, Cleansing' }, color: '#F8FAFC', aura: 'rgba(248, 250, 252, 0.8)', bg: 'rgba(248, 250, 252, 0.15)', border: 'rgba(248, 250, 252, 0.4)' },
+            { id: 'obsidian', name: { ko: '흑요석 (Obsidian)', en: 'Obsidian' }, desc: { ko: '강력한 액막이, 음기 차단', en: 'Grounding, Ward off Negativity' }, color: '#64748B', aura: 'rgba(71, 85, 105, 0.9)', bg: 'rgba(30, 41, 59, 0.4)', border: 'rgba(100, 116, 139, 0.5)' },
+            { id: 'citrine', name: { ko: '황수정 (Citrine)', en: 'Citrine' }, desc: { ko: '풍요, 성공, 태양 에너지', en: 'Abundance, Success, Solar Energy' }, color: '#FACC15', aura: 'rgba(250, 204, 21, 0.7)', bg: 'rgba(250, 204, 21, 0.15)', border: 'rgba(250, 204, 21, 0.4)' },
+            { id: 'lapis', name: { ko: '청금석 (Lapis Lazuli)', en: 'Lapis Lazuli' }, desc: { ko: '지혜, 직관, 진실', en: 'Wisdom, Intuition, Truth' }, color: '#38BDF8', aura: 'rgba(56, 189, 248, 0.7)', bg: 'rgba(56, 189, 248, 0.15)', border: 'rgba(56, 189, 248, 0.4)' }
         ];
 
         // --- 2. 앱 상태 관리 ---
@@ -567,14 +828,18 @@
         // --- 3. 초기화 ---
         window.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
-            calculateMoonAndSabbat();
-            renderCrystalPresets();
+            
+            // 언어 자동 감지 및 초기화
+            const initLang = getInitialLanguage();
+            loadLanguageData(initLang);
+
             loadSavedState();
             setupEventListeners();
         });
 
         function renderCrystalPresets() {
             const container = document.getElementById('crystal-preset-list');
+            if (!container) return;
             container.innerHTML = CRYSTAL_PRESETS.map(c => `
                 <button onclick="applyCrystalPreset('${c.id}')" class="w-full p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center gap-3 transition text-left group">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center border shadow-md flex-shrink-0" style="background:${c.bg}; border-color:${c.border}; color:${c.color}">
@@ -582,12 +847,13 @@
                     </div>
                     <div class="flex-1 min-w-0">
                         <div class="text-xs font-semibold text-slate-100 flex items-center gap-1.5">
-                            <span>${c.name}</span>
+                            <span>${c.name[currentLang] || c.name['en']}</span>
                         </div>
-                        <p class="text-[11px] text-slate-400 truncate">${c.desc}</p>
+                        <p class="text-[11px] text-slate-400 truncate">${c.desc[currentLang] || c.desc['en']}</p>
                     </div>
                 </button>
             `).join('');
+            lucide.createIcons();
         }
 
         function calculateMoonAndSabbat() {
@@ -601,34 +867,40 @@
             const jd = Math.floor(365.25 * (year + 4716)) + Math.floor(30.6001 * (month + 1)) + day + e - 1524.5;
             const daysSinceNew = (jd - 2451549.5) % 29.5305882;
             
-            let phaseText = "신월 (New Moon)";
-            if (daysSinceNew > 3.69 && daysSinceNew <= 7.38) phaseText = "초승달 (Waxing Crescent)";
-            else if (daysSinceNew > 7.38 && daysSinceNew <= 11.07) phaseText = "상현달 (First Quarter)";
-            else if (daysSinceNew > 11.07 && daysSinceNew <= 14.76) phaseText = "차오르는 달 (Waxing Gibbous)";
-            else if (daysSinceNew > 14.76 && daysSinceNew <= 18.45) phaseText = "보름달 (Full Moon)";
-            else if (daysSinceNew > 18.45 && daysSinceNew <= 22.14) phaseText = "기울어지는 달 (Waning Gibbous)";
-            else if (daysSinceNew > 22.14 && daysSinceNew <= 25.83) phaseText = "하현달 (Last Quarter)";
-            else if (daysSinceNew > 25.83) phaseText = "그믐달 (Waning Crescent)";
+            const moonPhases = {
+                ko: ["신월 (New Moon)", "초승달 (Waxing Crescent)", "상현달 (First Quarter)", "차오르는 달 (Waxing Gibbous)", "보름달 (Full Moon)", "기울어지는 달 (Waning Gibbous)", "하현달 (Last Quarter)", "그믐달 (Waning Crescent)"],
+                en: ["New Moon", "Waxing Crescent", "First Quarter", "Waxing Gibbous", "Full Moon", "Waning Gibbous", "Last Quarter", "Waning Crescent"]
+            };
 
-            document.getElementById('moon-phase-text').innerText = phaseText;
+            let phaseIdx = 0;
+            if (daysSinceNew > 3.69 && daysSinceNew <= 7.38) phaseIdx = 1;
+            else if (daysSinceNew > 7.38 && daysSinceNew <= 11.07) phaseIdx = 2;
+            else if (daysSinceNew > 11.07 && daysSinceNew <= 14.76) phaseIdx = 3;
+            else if (daysSinceNew > 14.76 && daysSinceNew <= 18.45) phaseIdx = 4;
+            else if (daysSinceNew > 18.45 && daysSinceNew <= 22.14) phaseIdx = 5;
+            else if (daysSinceNew > 22.14 && daysSinceNew <= 25.83) phaseIdx = 6;
+            else if (daysSinceNew > 25.83) phaseIdx = 7;
 
-            let sabbat = "삼하인 (Samhain)";
-            if (month === 12) sabbat = "율 (Yule)";
-            else if (month === 2) sabbat = "임볼크 (Imbolc)";
-            else if (month === 3) sabbat = "오스타라 (Ostara)";
-            else if (month === 5) sabbat = "벨테인 (Beltane)";
-            else if (month === 6) sabbat = "리사 (Litha)";
-            else if (month === 8) sabbat = "루나사 (Lughnasadh)";
-            else if (month === 9) sabbat = "마본 (Mabon)";
+            document.getElementById('moon-phase-text').innerText = moonPhases[currentLang][phaseIdx];
 
-            document.getElementById('sabbat-text').innerText = `현재 시즌: ${sabbat}`;
+            const sabbats = {
+                ko: { 12: "율 (Yule)", 2: "임볼크 (Imbolc)", 3: "오스타라 (Ostara)", 5: "벨테인 (Beltane)", 6: "리사 (Litha)", 8: "루나사 (Lughnasadh)", 9: "마본 (Mabon)" },
+                en: { 12: "Yule", 2: "Imbolc", 3: "Ostara", 5: "Beltane", 6: "Litha", 8: "Lughnasadh", 9: "Mabon" }
+            };
+
+            const defaultSabbat = currentLang === 'ko' ? "삼하인 (Samhain)" : "Samhain";
+            const sabbat = sabbats[currentLang][month] || defaultSabbat;
+            const prefix = getNestedTranslation(translations[currentLang], 'sabbatSeasonPrefix') || (currentLang === 'ko' ? "현재 시즌: " : "Current Season: ");
+
+            document.getElementById('sabbat-text').innerText = `${prefix}${sabbat}`;
         }
 
-        // --- 룬 점 (Rune Reading) 추첨 로직 ---
+        // --- 룬 점 추첨 로직 ---
         function drawRunes(mode = 'yesno') {
             state.currentRuneMode = mode;
             const container = document.getElementById('rune-result-container');
             const sendBtn = document.getElementById('send-to-journal-btn');
+            const t = translations[currentLang].runeModal;
 
             document.querySelectorAll('.rune-spread-tab').forEach(tab => {
                 tab.classList.remove('bg-amber-500/20', 'border-amber-500/40', 'text-amber-200');
@@ -649,18 +921,15 @@
                 return {
                     ...rune,
                     isReversed,
-                    positionText: isReversed ? '역방향 (Reversed)' : '정방향 (Upright)'
+                    positionText: isReversed ? t.reversed : t.upright
                 };
             });
 
             state.lastRuneResults = results;
 
-            const labels3 = ['1. 과거 (Past)', '2. 현재 (Present)', '3. 미래 (Future)'];
-            const labels5 = ['1. 현재 상황', '2. 원인 / 제약', '3. 핵심 방향', '4. 여정 / 변화', '5. 최종 결과'];
-
             if (mode === 'yesno') {
                 const item = results[0];
-                const answer = !item.isReversed ? 'YES (긍정 / 진행)' : 'NO (신중 / 보류)';
+                const answer = !item.isReversed ? t.answerYes : t.answerNo;
                 const answerColor = !item.isReversed ? 'text-emerald-400 border-emerald-500/40 bg-emerald-500/10' : 'text-amber-400 border-amber-500/40 bg-amber-500/10';
 
                 container.innerHTML = `
@@ -674,12 +943,12 @@
                         <div class="px-3 py-1 rounded-full border text-xs font-semibold mb-2 ${answerColor}">
                             ${answer}
                         </div>
-                        <h4 class="text-base font-semibold text-slate-100">${item.name} (${item.krName})</h4>
+                        <h4 class="text-base font-semibold text-slate-100">${item.name} ${currentLang === 'ko' ? `(${item.krName})` : ''}</h4>
                         <p class="text-xs text-slate-400 mt-0.5">${item.positionText}</p>
                     </div>
                 `;
             } else {
-                const labels = mode === 'three' ? labels3 : labels5;
+                const labels = mode === 'three' ? t.labels3 : t.labels5;
                 container.innerHTML = `
                     <div class="grid grid-cols-1 sm:grid-cols-${mode === 'three' ? '3' : '5'} gap-3 py-2 animate-fade-in">
                         ${results.map((item, idx) => `
@@ -690,10 +959,10 @@
                                         ${item.symbol}
                                     </span>
                                 </div>
-                                <div class="text-xs font-semibold text-slate-200">${item.krName}</div>
+                                <div class="text-xs font-semibold text-slate-200">${currentLang === 'ko' ? item.krName : item.name}</div>
                                 <div class="text-[10px] text-slate-400 font-mono">${item.name}</div>
                                 <span class="text-[9px] mt-1 px-1.5 py-0.5 rounded ${item.isReversed ? 'bg-red-500/20 text-red-300' : 'bg-emerald-500/20 text-emerald-300'}">
-                                    ${item.isReversed ? '역방향' : '정방향'}
+                                    ${item.positionText}
                                 </span>
                             </div>
                         `).join('')}
@@ -713,17 +982,18 @@
             if (!state.lastRuneResults.length) return;
 
             const journal = document.getElementById('spell-journal');
-            const now = new Date().toLocaleDateString('ko-KR', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            const now = new Date().toLocaleDateString(currentLang === 'ko' ? 'ko-KR' : 'en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
             
-            let text = `\n\n[룬 점 리딩 - ${now}]\n`;
+            let text = `\n\n[${currentLang === 'ko' ? '룬 점 리딩' : 'Rune Reading'} - ${now}]\n`;
             state.lastRuneResults.forEach((r, idx) => {
-                text += `${idx + 1}. ${r.symbol} ${r.krName} (${r.name}) - ${r.positionText}\n`;
+                const nameStr = currentLang === 'ko' ? `${r.krName} (${r.name})` : r.name;
+                text += `${idx + 1}. ${r.symbol} ${nameStr} - ${r.positionText}\n`;
             });
 
             journal.value += text;
             journal.dispatchEvent(new Event('input'));
             
-            alert('룬 점 결과가 리추얼 노트에 기록되었습니다.');
+            alert(translations[currentLang].messages.runeSaved);
             document.getElementById('rune-modal').classList.add('hidden');
         }
 
@@ -748,7 +1018,7 @@
                 active: config.active !== undefined ? config.active : true,
                 color: config.color || '#f59e06',
                 crystalType: config.crystalType || 'amethyst',
-                customName: config.customName || '자수정 (Amethyst)',
+                customName: config.customName || (currentLang === 'ko' ? '자수정 (Amethyst)' : 'Amethyst'),
                 crystalColor: config.crystalColor || '#C084FC',
                 crystalAura: config.crystalAura || 'rgba(192, 132, 252, 0.7)'
             };
@@ -789,6 +1059,7 @@
         }
 
         function getItemHTML(item) {
+            const tTools = translations[currentLang].tools;
             switch(item.type) {
                 case 'candle':
                     const candleColor = item.color || '#f59e06';
@@ -802,7 +1073,7 @@
                                  style="background-color: ${candleColor}; --candle-glow-color: ${candleColor}">
                                 <div class="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-black/30"></div>
                             </div>
-                            <span class="text-[10px] text-slate-400 mt-1 opacity-80">양초</span>
+                            <span class="text-[10px] text-slate-400 mt-1 opacity-80">${tTools.candle}</span>
                         </div>
                     `;
                 case 'incense':
@@ -815,7 +1086,7 @@
                             <div class="w-10 h-4 bg-stone-700 rounded-b-xl border border-stone-500 shadow-md flex justify-center">
                                 <div class="w-1 h-6 bg-amber-900 -mt-4 rounded-t-full"></div>
                             </div>
-                            <span class="text-[10px] text-slate-400 mt-1">향로</span>
+                            <span class="text-[10px] text-slate-400 mt-1">${tTools.incense}</span>
                         </div>
                     `;
                 case 'chalice':
@@ -825,7 +1096,7 @@
                                 <div class="absolute inset-0 bg-cyan-500/20 animate-pulse"></div>
                                 <i data-lucide="wine" class="w-4 h-4 text-cyan-300 relative z-10"></i>
                             </div>
-                            <span class="text-[10px] text-slate-400 mt-1">성수 잔</span>
+                            <span class="text-[10px] text-slate-400 mt-1">${tTools.chalice}</span>
                         </div>
                     `;
                 case 'pentacle':
@@ -834,7 +1105,7 @@
                             <div class="w-16 h-16 rounded-full border border-purple-400/40 bg-purple-950/20 flex items-center justify-center shadow-lg">
                                 <i data-lucide="star" class="w-8 h-8 text-purple-300 stroke-[1.5]"></i>
                             </div>
-                            <span class="text-[10px] text-slate-400 mt-1">펜타클</span>
+                            <span class="text-[10px] text-slate-400 mt-1">${tTools.pentacle}</span>
                         </div>
                     `;
                 case 'crystal':
@@ -857,7 +1128,7 @@
                             <div class="w-2.5 h-24 bg-gradient-to-t from-amber-950 via-amber-800 to-emerald-400 rounded-full shadow-lg border border-amber-900/40 relative">
                                 <div class="w-2.5 h-2.5 bg-emerald-300 rounded-full blur-[2px] absolute top-0 left-0"></div>
                             </div>
-                            <span class="text-[10px] text-slate-400 mt-1">완드</span>
+                            <span class="text-[10px] text-slate-400 mt-1">${tTools.wand}</span>
                         </div>
                     `;
                 case 'athame':
@@ -874,14 +1145,14 @@
                                 </div>
                                 <div class="w-4 h-2 bg-amber-600 rounded-full border border-amber-800 -mt-0.5"></div>
                             </div>
-                            <span class="text-[10px] text-slate-400 mt-1">단검</span>
+                            <span class="text-[10px] text-slate-400 mt-1">${tTools.athame}</span>
                         </div>
                     `;
                 case 'bell':
                     return `
                         <div class="flex flex-col items-center">
                             <i data-lucide="bell" class="w-7 h-7 text-amber-300 filter drop-shadow"></i>
-                            <span class="text-[10px] text-slate-400 mt-1">정화 종</span>
+                            <span class="text-[10px] text-slate-400 mt-1">${tTools.bell}</span>
                         </div>
                     `;
                 case 'bowl':
@@ -890,7 +1161,7 @@
                             <div class="w-10 h-6 bg-stone-300/20 border border-stone-200/40 rounded-b-full flex items-center justify-center">
                                 <div class="w-7 h-2 bg-white/80 rounded-full blur-[1px]"></div>
                             </div>
-                            <span class="text-[10px] text-slate-400 mt-1">소금 그릇</span>
+                            <span class="text-[10px] text-slate-400 mt-1">${tTools.bowl}</span>
                         </div>
                     `;
             }
@@ -943,7 +1214,7 @@
                         if (data.journal !== undefined) newJournal = data.journal;
                         if (data.theme) newTheme = data.theme;
                     } else {
-                        alert("올바르지 않은 제단 데이터 파일입니다.");
+                        alert(translations[currentLang].messages.importError);
                         return;
                     }
 
@@ -968,11 +1239,11 @@
                     }
 
                     saveAltarLayout();
-                    alert("제단 데이터를 성공적으로 불러왔습니다!");
+                    alert(translations[currentLang].messages.importSuccess);
 
                 } catch (err) {
-                    console.error("파일 파싱 에러:", err);
-                    alert("파일을 파싱하는 중 오류가 발생했습니다.\n에러 내용: " + err.message);
+                    console.error("File parse error:", err);
+                    alert(translations[currentLang].messages.parseError + "\nDetails: " + err.message);
                 }
             };
 
@@ -1050,6 +1321,7 @@
             const title = document.getElementById('inspector-title');
             const rotationSlider = document.getElementById('rotation-slider');
             const rotationValue = document.getElementById('rotation-value');
+            const tInspector = translations[currentLang].inspector;
 
             inspector.classList.remove('hidden');
             inspector.classList.add('flex');
@@ -1063,24 +1335,24 @@
                 candlePicker.classList.add('flex');
                 crystalBtn.classList.add('hidden');
                 document.getElementById('candle-color-input').value = item.color || '#f59e06';
-                title.innerText = "양초 설정";
+                title.innerText = tInspector.candleTitle;
             } else if (item.type === 'crystal') {
                 candlePicker.classList.add('hidden');
                 crystalBtn.classList.remove('hidden');
                 crystalBtn.classList.add('flex');
-                title.innerText = `원석: ${item.customName}`;
+                title.innerText = `${currentLang === 'ko' ? '원석' : 'Crystal'}: ${item.customName}`;
             } else if (item.type === 'athame') {
                 candlePicker.classList.add('hidden');
                 crystalBtn.classList.add('hidden');
-                title.innerText = "단검 설정";
+                title.innerText = tInspector.athameTitle;
             } else if (item.type === 'wand') {
                 candlePicker.classList.add('hidden');
                 crystalBtn.classList.add('hidden');
-                title.innerText = "완드 설정";
+                title.innerText = tInspector.wandTitle;
             } else {
                 candlePicker.classList.add('hidden');
                 crystalBtn.classList.add('hidden');
-                title.innerText = "도구 관리";
+                title.innerText = tInspector.title;
             }
         }
 
@@ -1100,7 +1372,7 @@
             }
         }
 
-        // --- 원석 커스터마이징 ---
+        // --- 원석 커스터마이징 모달 ---
         let activeCrystalTargetId = null;
 
         function openCrystalModal(id) {
@@ -1119,7 +1391,7 @@
 
             if (item && preset) {
                 item.crystalType = preset.id;
-                item.customName = preset.name;
+                item.customName = preset.name[currentLang] || preset.name['en'];
                 item.crystalColor = preset.color;
                 item.crystalAura = preset.aura;
 
@@ -1158,7 +1430,7 @@
             }
 
             if (state.selectedItemId === item.id) {
-                document.getElementById('inspector-title').innerText = `원석: ${item.customName}`;
+                document.getElementById('inspector-title').innerText = `${currentLang === 'ko' ? '원석' : 'Crystal'}: ${item.customName}`;
             }
         }
 
@@ -1170,9 +1442,9 @@
             }
         });
 
-        // --- 8. 이벤트 ---
+        // --- 8. 이벤트 바인딩 ---
         function setupEventListeners() {
-            // 룬 이벤트
+            // 룬 모달 이벤트
             const runeModal = document.getElementById('rune-modal');
             document.getElementById('rune-btn').addEventListener('click', () => {
                 runeModal.classList.remove('hidden');
@@ -1283,11 +1555,11 @@
             const journalStatus = document.getElementById('journal-status');
             let timeout = null;
             journal.addEventListener('input', () => {
-                journalStatus.innerText = '저장 중...';
+                journalStatus.innerText = translations[currentLang].journal.saving;
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
                     localStorage.setItem('cyber_altar_journal', journal.value);
-                    journalStatus.innerText = '저장 완료';
+                    journalStatus.innerText = translations[currentLang].journal.saved;
                 }, 800);
             });
         }
@@ -1296,7 +1568,7 @@
         function saveAltarLayout() {
             localStorage.setItem('cyber_altar_layout', JSON.stringify(state.items));
             localStorage.setItem('cyber_altar_theme', state.theme);
-            alert('현재 제단 배치와 테마가 성공적으로 저장되었습니다.');
+            alert(translations[currentLang].messages.saved);
         }
 
         function loadSavedState() {
@@ -1324,7 +1596,7 @@
         }
 
         function clearAltar() {
-            if (confirm('제단의 모든 도구를 지우시겠습니까?')) {
+            if (confirm(translations[currentLang].messages.clearConfirm)) {
                 document.getElementById('altar-canvas').innerHTML = '';
                 state.items = [];
                 state.selectedItemId = null;
@@ -1335,7 +1607,7 @@
         }
 
         function clearJournal() {
-            if (confirm('작성하신 노트를 지우시겠습니까?')) {
+            if (confirm(translations[currentLang].messages.clearJournalConfirm)) {
                 document.getElementById('spell-journal').value = '';
                 localStorage.removeItem('cyber_altar_journal');
             }
