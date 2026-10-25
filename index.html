@@ -144,6 +144,14 @@
             border: 1px solid var(--border-color);
         }
 
+        /* 룬 스톤 카드 애니메이션 */
+        .rune-card {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .rune-card:hover {
+            transform: translateY(-4px);
+        }
+
         /* 스크롤바 미화 */
         ::-webkit-scrollbar {
             width: 6px;
@@ -184,12 +192,20 @@
             <div class="w-px h-3 bg-white/10"></div>
             <div class="flex items-center gap-2">
                 <i data-lucide="sun" class="w-4 h-4 text-amber-400"></i>
-                <span id="sabbat-text">사밧 정보</span>
+                <span id="sabbat-text">사바트 정보</span>
             </div>
         </div>
 
         <!-- 설정 및 파일 조작 컨트롤 -->
         <div class="flex items-center gap-2">
+            <!-- 룬 점 캐스팅 버튼 -->
+            <button id="rune-btn" class="flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 text-xs text-amber-200 rounded-xl border border-amber-500/40 transition">
+                <i data-lucide="compass" class="w-4 h-4 text-amber-300"></i>
+                <span>룬 점 리딩</span>
+            </button>
+
+            <div class="w-px h-4 bg-white/10 mx-1"></div>
+
             <!-- 파일 내보내기/불러오기 버튼 모음 -->
             <button id="export-btn" class="px-2.5 py-1.5 bg-purple-900/60 hover:bg-purple-800 text-xs text-purple-200 rounded-xl border border-purple-500/30 flex items-center gap-1 transition">
                 <i data-lucide="download" class="w-3.5 h-3.5"></i>
@@ -200,8 +216,6 @@
                 <span>불러오기</span>
             </button>
             <input type="file" id="file-input" accept=".altar,.json,text/plain" style="display: none;">
-
-            <div class="w-px h-4 bg-white/10 mx-1"></div>
 
             <!-- 테마 변경 버튼 -->
             <button id="theme-btn" title="테마 변경" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 transition">
@@ -236,7 +250,7 @@
 
                 <button onclick="addAltarItem('incense')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-white/5 hover:bg-purple-500/10 border border-white/5 hover:border-purple-500/30 text-xs text-slate-300 transition group">
                     <i data-lucide="wind" class="w-5 h-5 mb-1 text-slate-300 group-hover:scale-110 transition"></i>
-                    <span>정화 향로</span>
+                    <span>향로</span>
                 </button>
 
                 <button onclick="addAltarItem('chalice')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-white/5 hover:bg-purple-500/10 border border-white/5 hover:border-purple-500/30 text-xs text-slate-300 transition group">
@@ -256,10 +270,9 @@
 
                 <button onclick="addAltarItem('wand')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-white/5 hover:bg-purple-500/10 border border-white/5 hover:border-purple-500/30 text-xs text-slate-300 transition group">
                     <i data-lucide="wand-2" class="w-5 h-5 mb-1 text-emerald-400 group-hover:scale-110 transition"></i>
-                    <span>마법 지팡이</span>
+                    <span>완드</span>
                 </button>
 
-                <!-- 단검(Athame) -->
                 <button onclick="addAltarItem('athame')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-white/5 hover:bg-purple-500/10 border border-white/5 hover:border-purple-500/30 text-xs text-slate-300 transition group">
                     <i data-lucide="sword" class="w-5 h-5 mb-1 text-slate-200 group-hover:scale-110 transition"></i>
                     <span>단검</span>
@@ -289,7 +302,7 @@
 
         <!-- 중앙: 메인 제단 작업 영역 (Altar Workspace) -->
         <section id="altar-workspace" class="flex-1 relative min-h-[50vh] md:min-h-0 overflow-hidden">
-            <!-- 안내 문구 (아이템이 없을 때) -->
+            <!-- 안내 문구 -->
             <div id="empty-notice" class="absolute inset-0 flex flex-col items-center justify-center text-slate-500 pointer-events-none transition-opacity duration-300">
                 <i data-lucide="sparkles" class="w-10 h-10 mb-2 opacity-30"></i>
                 <p class="text-sm font-light">왼쪽 도구함에서 제단에 올릴 아이템을 선택하세요.</p>
@@ -305,7 +318,7 @@
                     <i data-lucide="sliders" class="w-3.5 h-3.5"></i> 아이템 설정
                 </span>
 
-                <!-- 회전 제어 슬라이더 & 버튼 (모든 도구 공통) -->
+                <!-- 회전 제어 슬라이더 & 버튼 -->
                 <div class="flex items-center gap-2 bg-white/5 px-2.5 py-1 rounded-xl border border-white/10">
                     <label class="text-[11px] text-slate-300 flex items-center gap-1">
                         <i data-lucide="rotate-cw" class="w-3 h-3 text-purple-300"></i>
@@ -361,7 +374,64 @@
         </aside>
     </main>
 
-    <!-- 3C 리추얼 가이드 모달 -->
+    <!-- 룬 점 모달 -->
+    <div id="rune-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-panel max-w-xl w-full rounded-2xl p-6 relative border border-amber-500/30 shadow-2xl flex flex-col max-h-[90vh]">
+            <!-- 닫기 버튼 -->
+            <button id="close-rune-modal-btn" class="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <!-- 타이틀 영역 -->
+            <div class="flex items-center gap-3 mb-5">
+                <div class="p-2.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                    <i data-lucide="compass" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h3 class="serif text-lg font-semibold text-amber-100">엘더 푸사르크 룬 캐스팅</h3>
+                    <p class="text-xs text-slate-400">룬 점을 시작합니다</p>
+                </div>
+            </div>
+
+            <!-- 스프레드 선택 탭 -->
+            <div class="grid grid-cols-3 gap-2 mb-5">
+                <button onclick="drawRunes('yesno')" class="rune-spread-tab py-2 px-3 rounded-xl bg-white/5 hover:bg-amber-500/20 border border-white/10 text-xs font-medium text-slate-300 transition" id="tab-yesno">
+                    <div class="font-semibold text-amber-200">YES / NO</div>
+                    <div class="text-[10px] text-slate-400">1개 룬 추첨</div>
+                </button>
+                <button onclick="drawRunes('three')" class="rune-spread-tab py-2 px-3 rounded-xl bg-white/5 hover:bg-amber-500/20 border border-white/10 text-xs font-medium text-slate-300 transition" id="tab-three">
+                    <div class="font-semibold text-amber-200">3개 스프레드</div>
+                    <div class="text-[10px] text-slate-400">과거 / 현재 / 미래</div>
+                </button>
+                <button onclick="drawRunes('five')" class="rune-spread-tab py-2 px-3 rounded-xl bg-white/5 hover:bg-amber-500/20 border border-white/10 text-xs font-medium text-slate-300 transition" id="tab-five">
+                    <div class="font-semibold text-amber-200">5개 스프레드</div>
+                    <div class="text-[10px] text-slate-400">종합 서사 리딩</div>
+                </button>
+            </div>
+
+            <!-- 룬 결과 출력 컨테이너 -->
+            <div id="rune-result-container" class="flex-1 overflow-y-auto my-2 pr-1 flex flex-col justify-center min-h-[180px]">
+                <div class="text-center text-slate-500 py-8">
+                    <i data-lucide="sparkles" class="w-8 h-8 mx-auto mb-2 opacity-40"></i>
+                    <p class="text-xs">상단의 스프레드 버튼을 눌러 룬을 뽑으세요.</p>
+                </div>
+            </div>
+
+            <!-- 결과 제어 하단 버튼 -->
+            <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
+                <button id="send-to-journal-btn" class="px-4 py-2 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/40 text-purple-200 text-xs font-medium flex items-center gap-1.5 transition hidden">
+                    <i data-lucide="feather" class="w-4 h-4"></i>
+                    <span>결과를 리추얼 노트로 전송</span>
+                </button>
+                <button id="redraw-rune-btn" onclick="redrawCurrentSpread()" class="ml-auto px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-amber-950 text-xs font-semibold flex items-center gap-1.5 transition shadow-lg shadow-amber-600/20">
+                    <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+                    <span>다시 뽑기</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3C 가이드 모달 -->
     <div id="guide-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="glass-panel max-w-lg w-full rounded-2xl p-6 relative border border-purple-500/30 shadow-2xl">
             <button id="close-guide-btn" class="absolute top-4 right-4 p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition">
@@ -392,7 +462,7 @@
                         <span class="w-5 h-5 rounded-full bg-purple-500/20 text-purple-300 flex items-center justify-center text-[10px]">2</span>
                         2. Consecration (축성)
                     </h4>
-                    <p class="text-slate-400">도구를 단순한 물건에서 '마법적 목적을 가진 성물'로 지정합니다. 4원소의 기운을 쐬어주며 의도를 선언합니다.</p>
+                    <p class="text-slate-400">도구를 단순한 물건에서 '마법적 목적을 가진 성물'로 지정합니다. 4원소(지·수·화·풍)의 기운을 쐬어주며 의도를 선언합니다.</p>
                 </div>
 
                 <div class="bg-white/5 p-3.5 rounded-xl border border-white/5">
@@ -445,69 +515,51 @@
 
     <!-- JavaScript 로직 -->
     <script>
+        // --- 24개 고대 엘더 푸사르크 룬 데이터베이스 ---
+        const RUNE_DATABASE = [
+            { symbol: 'ᚠ', name: 'Fehu', krName: '페후', reversible: true },
+            { symbol: 'ᚢ', name: 'Uruz', krName: '우루즈', reversible: true },
+            { symbol: 'ᚦ', name: 'Thurisaz', krName: '투리사즈', reversible: true },
+            { symbol: 'ᚨ', name: 'Ansuz', krName: '안수즈', reversible: true },
+            { symbol: 'ᚱ', name: 'Raidho', krName: '라이도', reversible: true },
+            { symbol: 'ᚲ', name: 'Kenaz', krName: '케나즈', reversible: true },
+            { symbol: 'ᚷ', name: 'Gebo', krName: '게보', reversible: false },
+            { symbol: 'ᚹ', name: 'Wunjo', krName: '운조', reversible: true },
+            { symbol: 'ᚺ', name: 'Hagalaz', krName: '하갈라즈', reversible: false },
+            { symbol: 'ᚾ', name: 'Nauthiz', krName: '나우티즈', reversible: false },
+            { symbol: 'ᛁ', name: 'Isa', krName: '이사', reversible: false },
+            { symbol: 'ᛃ', name: 'Jera', krName: '제라', reversible: false },
+            { symbol: 'ᛇ', name: 'Eihwaz', krName: '아이와즈', reversible: false },
+            { symbol: 'ᛈ', name: 'Perthro', krName: '페르스로', reversible: true },
+            { symbol: 'ᛉ', name: 'Algiz', krName: '알기즈', reversible: true },
+            { symbol: 'ᛋ', name: 'Sowilo', krName: '소울루', reversible: false },
+            { symbol: 'ᛏ', name: 'Tiwaz', krName: '티와즈', reversible: true },
+            { symbol: 'ᛒ', name: 'Berkano', krName: '베르카노', reversible: true },
+            { symbol: 'ᛖ', name: 'Ehwaz', krName: '에와즈', reversible: true },
+            { symbol: 'ᛗ', name: 'Mannaz', krName: '마나즈', reversible: true },
+            { symbol: 'ᛚ', name: 'Laguz', krName: '라구즈', reversible: true },
+            { symbol: 'ᛝ', name: 'Ingwaz', krName: '잉구즈', reversible: false },
+            { symbol: 'ᛟ', name: 'Othala', krName: '오살라', reversible: true },
+            { symbol: 'ᛞ', name: 'Dagaz', krName: '다가즈', reversible: false }
+        ];
+
         // --- 1. 대표 원석 데이터베이스 ---
         const CRYSTAL_PRESETS = [
-            {
-                id: 'amethyst',
-                name: '자수정 (Amethyst)',
-                desc: '영성, 영적 보호, 명상',
-                color: '#C084FC',
-                aura: 'rgba(192, 132, 252, 0.7)',
-                bg: 'rgba(192, 132, 252, 0.15)',
-                border: 'rgba(192, 132, 252, 0.4)'
-            },
-            {
-                id: 'rosequartz',
-                name: '장미수정 (Rose Quartz)',
-                desc: '사랑, 자애, 정서적 치유',
-                color: '#F472B6',
-                aura: 'rgba(244, 114, 182, 0.7)',
-                bg: 'rgba(244, 114, 182, 0.15)',
-                border: 'rgba(244, 114, 182, 0.4)'
-            },
-            {
-                id: 'clearquartz',
-                name: '백수정 (Clear Quartz)',
-                desc: '에너지 증폭, 명확함, 정화',
-                color: '#F8FAFC',
-                aura: 'rgba(248, 250, 252, 0.8)',
-                bg: 'rgba(248, 250, 252, 0.15)',
-                border: 'rgba(248, 250, 252, 0.4)'
-            },
-            {
-                id: 'obsidian',
-                name: '흑요석 (Obsidian)',
-                desc: '강력한 액막이, 음기 차단, 라포 형성',
-                color: '#64748B',
-                aura: 'rgba(71, 85, 105, 0.9)',
-                bg: 'rgba(30, 41, 59, 0.4)',
-                border: 'rgba(100, 116, 139, 0.5)'
-            },
-            {
-                id: 'citrine',
-                name: '황수정 (Citrine)',
-                desc: '풍요, 성공, 태양 에너지',
-                color: '#FACC15',
-                aura: 'rgba(250, 204, 21, 0.7)',
-                bg: 'rgba(250, 204, 21, 0.15)',
-                border: 'rgba(250, 204, 21, 0.4)'
-            },
-            {
-                id: 'lapis',
-                name: '청금석 (Lapis Lazuli)',
-                desc: '지혜, 직관, 진실',
-                color: '#38BDF8',
-                aura: 'rgba(56, 189, 248, 0.7)',
-                bg: 'rgba(56, 189, 248, 0.15)',
-                border: 'rgba(56, 189, 248, 0.4)'
-            }
+            { id: 'amethyst', name: '자수정 (Amethyst)', desc: '영성, 영적 보호, 명상', color: '#C084FC', aura: 'rgba(192, 132, 252, 0.7)', bg: 'rgba(192, 132, 252, 0.15)', border: 'rgba(192, 132, 252, 0.4)' },
+            { id: 'rosequartz', name: '장미수정 (Rose Quartz)', desc: '사랑, 자애, 정서적 치유', color: '#F472B6', aura: 'rgba(244, 114, 182, 0.7)', bg: 'rgba(244, 114, 182, 0.15)', border: 'rgba(244, 114, 182, 0.4)' },
+            { id: 'clearquartz', name: '백수정 (Clear Quartz)', desc: '에너지 증폭, 명확함, 정화', color: '#F8FAFC', aura: 'rgba(248, 250, 252, 0.8)', bg: 'rgba(248, 250, 252, 0.15)', border: 'rgba(248, 250, 252, 0.4)' },
+            { id: 'obsidian', name: '흑요석 (Obsidian)', desc: '강력한 액막이, 음기 차단, 라포 형성', color: '#64748B', aura: 'rgba(71, 85, 105, 0.9)', bg: 'rgba(30, 41, 59, 0.4)', border: 'rgba(100, 116, 139, 0.5)' },
+            { id: 'citrine', name: '황수정 (Citrine)', desc: '풍요, 성공, 태양 에너지', color: '#FACC15', aura: 'rgba(250, 204, 21, 0.7)', bg: 'rgba(250, 204, 21, 0.15)', border: 'rgba(250, 204, 21, 0.4)' },
+            { id: 'lapis', name: '청금석 (Lapis Lazuli)', desc: '지혜, 직관, 진실', color: '#38BDF8', aura: 'rgba(56, 189, 248, 0.7)', bg: 'rgba(56, 189, 248, 0.15)', border: 'rgba(56, 189, 248, 0.4)' }
         ];
 
         // --- 2. 앱 상태 관리 ---
         const state = {
             theme: 'minimal',
             items: [],
-            selectedItemId: null
+            selectedItemId: null,
+            currentRuneMode: 'yesno',
+            lastRuneResults: []
         };
 
         const themes = ['theme-minimal', 'theme-dark', 'theme-earthy'];
@@ -572,6 +624,109 @@
             document.getElementById('sabbat-text').innerText = `현재 시즌: ${sabbat}`;
         }
 
+        // --- 룬 점 (Rune Reading) 추첨 로직 ---
+        function drawRunes(mode = 'yesno') {
+            state.currentRuneMode = mode;
+            const container = document.getElementById('rune-result-container');
+            const sendBtn = document.getElementById('send-to-journal-btn');
+
+            document.querySelectorAll('.rune-spread-tab').forEach(tab => {
+                tab.classList.remove('bg-amber-500/20', 'border-amber-500/40', 'text-amber-200');
+                tab.classList.add('bg-white/5', 'border-white/10', 'text-slate-300');
+            });
+            const activeTab = document.getElementById(`tab-${mode}`);
+            if (activeTab) {
+                activeTab.classList.remove('bg-white/5', 'border-white/10', 'text-slate-300');
+                activeTab.classList.add('bg-amber-500/20', 'border-amber-500/40', 'text-amber-200');
+            }
+
+            const count = mode === 'yesno' ? 1 : (mode === 'three' ? 3 : 5);
+            const shuffled = [...RUNE_DATABASE].sort(() => Math.random() - 0.5);
+            const selected = shuffled.slice(0, count);
+
+            const results = selected.map(rune => {
+                const isReversed = rune.reversible ? (Math.random() < 0.5) : false;
+                return {
+                    ...rune,
+                    isReversed,
+                    positionText: isReversed ? '역방향 (Reversed)' : '정방향 (Upright)'
+                };
+            });
+
+            state.lastRuneResults = results;
+
+            const labels3 = ['1. 과거 (Past)', '2. 현재 (Present)', '3. 미래 (Future)'];
+            const labels5 = ['1. 현재 상황', '2. 원인 / 제약', '3. 핵심 방향', '4. 여정 / 변화', '5. 최종 결과'];
+
+            if (mode === 'yesno') {
+                const item = results[0];
+                const answer = !item.isReversed ? 'YES (긍정 / 진행)' : 'NO (신중 / 보류)';
+                const answerColor = !item.isReversed ? 'text-emerald-400 border-emerald-500/40 bg-emerald-500/10' : 'text-amber-400 border-amber-500/40 bg-amber-500/10';
+
+                container.innerHTML = `
+                    <div class="flex flex-col items-center py-4 animate-fade-in">
+                        <div class="w-24 h-32 rounded-2xl bg-gradient-to-b from-stone-800 to-stone-900 border-2 border-amber-500/40 flex items-center justify-center shadow-xl mb-4 relative overflow-hidden group">
+                            <div class="absolute inset-0 bg-amber-500/5 group-hover:bg-amber-500/10 transition"></div>
+                            <span class="text-5xl font-serif text-amber-200 ${item.isReversed ? 'rotate-180' : ''} transition-transform duration-500">
+                                ${item.symbol}
+                            </span>
+                        </div>
+                        <div class="px-3 py-1 rounded-full border text-xs font-semibold mb-2 ${answerColor}">
+                            ${answer}
+                        </div>
+                        <h4 class="text-base font-semibold text-slate-100">${item.name} (${item.krName})</h4>
+                        <p class="text-xs text-slate-400 mt-0.5">${item.positionText}</p>
+                    </div>
+                `;
+            } else {
+                const labels = mode === 'three' ? labels3 : labels5;
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 sm:grid-cols-${mode === 'three' ? '3' : '5'} gap-3 py-2 animate-fade-in">
+                        ${results.map((item, idx) => `
+                            <div class="rune-card bg-white/5 border border-white/10 rounded-2xl p-3 flex flex-col items-center text-center relative">
+                                <span class="text-[10px] font-semibold text-amber-300/80 mb-2">${labels[idx]}</span>
+                                <div class="w-16 h-20 rounded-xl bg-stone-900 border border-amber-500/30 flex items-center justify-center shadow-md mb-2 relative">
+                                    <span class="text-3xl font-serif text-amber-200 ${item.isReversed ? 'rotate-180' : ''} transition-transform duration-500">
+                                        ${item.symbol}
+                                    </span>
+                                </div>
+                                <div class="text-xs font-semibold text-slate-200">${item.krName}</div>
+                                <div class="text-[10px] text-slate-400 font-mono">${item.name}</div>
+                                <span class="text-[9px] mt-1 px-1.5 py-0.5 rounded ${item.isReversed ? 'bg-red-500/20 text-red-300' : 'bg-emerald-500/20 text-emerald-300'}">
+                                    ${item.isReversed ? '역방향' : '정방향'}
+                                </span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            sendBtn.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function redrawCurrentSpread() {
+            drawRunes(state.currentRuneMode);
+        }
+
+        function sendRuneToJournal() {
+            if (!state.lastRuneResults.length) return;
+
+            const journal = document.getElementById('spell-journal');
+            const now = new Date().toLocaleDateString('ko-KR', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            
+            let text = `\n\n[룬 점 리딩 - ${now}]\n`;
+            state.lastRuneResults.forEach((r, idx) => {
+                text += `${idx + 1}. ${r.symbol} ${r.krName} (${r.name}) - ${r.positionText}\n`;
+            });
+
+            journal.value += text;
+            journal.dispatchEvent(new Event('input'));
+            
+            alert('룬 점 결과가 리추얼 노트에 기록되었습니다.');
+            document.getElementById('rune-modal').classList.add('hidden');
+        }
+
         // --- 4. 제단 아이템 추가 & 랜더링 ---
         function addAltarItem(type, config = {}) {
             document.getElementById('empty-notice').classList.add('opacity-0');
@@ -589,7 +744,7 @@
                 type,
                 x: defaultX,
                 y: defaultY,
-                rotation: config.rotation || 0, // 회전 각도 (도 단위)
+                rotation: config.rotation || 0,
                 active: config.active !== undefined ? config.active : true,
                 color: config.color || '#f59e06',
                 crystalType: config.crystalType || 'amethyst',
@@ -660,7 +815,7 @@
                             <div class="w-10 h-4 bg-stone-700 rounded-b-xl border border-stone-500 shadow-md flex justify-center">
                                 <div class="w-1 h-6 bg-amber-900 -mt-4 rounded-t-full"></div>
                             </div>
-                            <span class="text-[10px] text-slate-400 mt-1">정화 향로</span>
+                            <span class="text-[10px] text-slate-400 mt-1">향로</span>
                         </div>
                     `;
                 case 'chalice':
@@ -702,28 +857,24 @@
                             <div class="w-2.5 h-24 bg-gradient-to-t from-amber-950 via-amber-800 to-emerald-400 rounded-full shadow-lg border border-amber-900/40 relative">
                                 <div class="w-2.5 h-2.5 bg-emerald-300 rounded-full blur-[2px] absolute top-0 left-0"></div>
                             </div>
-                            <span class="text-[10px] text-slate-400 mt-1">지팡이</span>
+                            <span class="text-[10px] text-slate-400 mt-1">완드</span>
                         </div>
                     `;
                 case 'athame':
                     return `
                         <div class="flex flex-col items-center">
                             <div class="relative flex flex-col items-center filter drop-shadow-md">
-                                <!-- 날 (Blade) -->
                                 <div class="w-3 h-16 bg-gradient-to-t from-slate-400 via-slate-200 to-slate-100 rounded-t-full border border-slate-300 relative overflow-hidden">
                                     <div class="w-0.5 h-full bg-white/70 absolute left-1/2 -translate-x-1/2"></div>
                                 </div>
-                                <!-- 가드 (Guard) -->
                                 <div class="w-8 h-1.5 bg-amber-600 rounded-full shadow-sm border border-amber-800 -my-0.5 z-10"></div>
-                                <!-- 자루 (Hilt) -->
                                 <div class="w-3 h-7 bg-stone-900 border border-stone-700 rounded-b-sm flex flex-col justify-between py-0.5 items-center">
                                     <div class="w-full h-0.5 bg-amber-600/60"></div>
                                     <div class="w-full h-0.5 bg-amber-600/60"></div>
                                 </div>
-                                <!-- 폼멜 (Pommel) -->
                                 <div class="w-4 h-2 bg-amber-600 rounded-full border border-amber-800 -mt-0.5"></div>
                             </div>
-                            <span class="text-[10px] text-slate-400 mt-1">단검 (Athame)</span>
+                            <span class="text-[10px] text-slate-400 mt-1">단검</span>
                         </div>
                     `;
                 case 'bell':
@@ -748,7 +899,7 @@
         // --- 5. 내보내기 & 불러오기 기능 ---
         function exportAltarData() {
             const exportData = {
-                version: "1.1",
+                version: "1.2",
                 exportDate: new Date().toISOString(),
                 theme: state.theme,
                 journal: document.getElementById('spell-journal').value,
@@ -903,7 +1054,6 @@
             inspector.classList.remove('hidden');
             inspector.classList.add('flex');
 
-            // 회전 슬라이더 값 동기화
             const currentRotation = item.rotation || 0;
             rotationSlider.value = currentRotation;
             rotationValue.innerText = `${currentRotation}°`;
@@ -922,11 +1072,11 @@
             } else if (item.type === 'athame') {
                 candlePicker.classList.add('hidden');
                 crystalBtn.classList.add('hidden');
-                title.innerText = "단검 (Athame) 설정";
+                title.innerText = "단검 설정";
             } else if (item.type === 'wand') {
                 candlePicker.classList.add('hidden');
                 crystalBtn.classList.add('hidden');
-                title.innerText = "지팡이 설정";
+                title.innerText = "완드 설정";
             } else {
                 candlePicker.classList.add('hidden');
                 crystalBtn.classList.add('hidden');
@@ -950,7 +1100,7 @@
             }
         }
 
-        // --- 원석 커스터마이징 모달 ---
+        // --- 원석 커스터마이징 ---
         let activeCrystalTargetId = null;
 
         function openCrystalModal(id) {
@@ -1020,8 +1170,17 @@
             }
         });
 
-        // --- 8. 이벤트 바인딩 ---
+        // --- 8. 이벤트 ---
         function setupEventListeners() {
+            // 룬 이벤트
+            const runeModal = document.getElementById('rune-modal');
+            document.getElementById('rune-btn').addEventListener('click', () => {
+                runeModal.classList.remove('hidden');
+                drawRunes('yesno');
+            });
+            document.getElementById('close-rune-modal-btn').addEventListener('click', () => runeModal.classList.add('hidden'));
+            document.getElementById('send-to-journal-btn').addEventListener('click', sendRuneToJournal);
+
             // 파일 내보내기/불러오기
             document.getElementById('export-btn').addEventListener('click', exportAltarData);
             document.getElementById('import-btn').addEventListener('click', () => document.getElementById('file-input').click());
@@ -1058,7 +1217,7 @@
                 }
             });
 
-            // Inspector: 색상 변경 (양초)
+            // Inspector: 양초 색상 변경
             document.getElementById('candle-color-input').addEventListener('input', (e) => {
                 if (!state.selectedItemId) return;
                 const item = state.items.find(i => i.id === state.selectedItemId);
